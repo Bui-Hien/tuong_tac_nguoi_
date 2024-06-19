@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Medicine;
 use App\Models\Rule;
 use App\Models\Schedule;
 use App\Models\Service;
 use App\Models\User;
 use App\Models\UserRule;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use PhpOffice\PhpWord\PhpWord;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function employee()
-    {
-        return view('employees.home');
-    }
 
     public function doctor()
     {
@@ -203,11 +203,6 @@ class UserController extends Controller
         return view('managers.search', compact('data', 'rules'));
     }
 
-    public function CreateBuild()
-    {
-        $services = Service::all();
-        return view('customers.create-build', compact('services'));
-    }
 
     public function StoreBuild(Request $request)
     {
@@ -252,29 +247,455 @@ class UserController extends Controller
         }
     }
 
-    public function getCfBuild(Request $request)
+    public function schedulenew()
     {
-        $status = $request->input('status');
-        if ($status === null) {
-            // Fetch users with schedules having status 0
-            $users = User::whereHas('schedulesAsCustomer', function ($query) {
-                $query->where('status', '=', 0);
-            })->with(['schedulesAsCustomer' => function ($query) {
-                $query->where('status', '=', 0);
-            }])->get();
-        } else {
-            // Fetcuh users with schedules having the specified status
-            $users = User::whereHas('schedulesAsCustomer', function ($query) use ($status) {
-                $query->where('status', '=', $status);
-            })->with(['schedulesAsCustomer' => function ($query) use ($status) {
-                $query->where('status', '=', $status);
-            }])->get();
-        }
+        $status = 0;
+        // Fetch users with schedules having status 0
+        $users = User::whereHas('schedulesAsCustomer', function ($query) {
+            $query->where('status', '=', 0);
+        })->with(['schedulesAsCustomer' => function ($query) {
+            $query->where('status', '=', 0);
+        }])->get();
         $statusCounts = Schedule::select('status', \DB::raw('COUNT(*) as status_count'))
             ->groupBy('status')
             ->get();
-        echo $users;
-        return view('employees.cfBuildCustomer', compact('users', 'status', 'statusCounts'));
+        return view('employees.booknew', compact('users', 'status', 'statusCounts'));
+    }
+
+    public function schedulecf()
+    {
+        $status = 1;
+        // Fetcuh users with schedules having the specified status
+        $users = User::whereHas('schedulesAsCustomer', function ($query) use ($status) {
+            $query->where('status', '=', 1);
+        })->with(['schedulesAsCustomer' => function ($query) use ($status) {
+            $query->where('status', '=', 1);
+        }])->get();
+        $statusCounts = Schedule::select('status', \DB::raw('COUNT(*) as status_count'))
+            ->groupBy('status')
+            ->get();
+        $service = Service::all();
+        return view('employees.confirmedbook', compact('users', 'status', 'statusCounts', 'service'));
+    }
+
+    public function schedulecancel(Request $request)
+    {
+        $status = 2;
+
+        // Fetcuh users with schedules having the specified status
+        $users = User::whereHas('schedulesAsCustomer', function ($query) use ($status) {
+            $query->where('status', '=', $status);
+        })->with(['schedulesAsCustomer' => function ($query) use ($status) {
+            $query->where('status', '=', $status);
+        }])->get();
+
+        $statusCounts = Schedule::select('status', \DB::raw('COUNT(*) as status_count'))
+            ->groupBy('status')
+            ->get();
+        return view('employees.cancelbook', compact('users', 'status', 'statusCounts'));
+    }
+
+    public function customer(Request $request)
+    {
+        // Retrieve query parameters from the request
+        $customerId = $request->input('customer_id');
+        $serviceName = $request->input('service_name');
+        $serviceId = $request->input('service_id');
+        $serviceCost = $request->input('service_cost');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        // Build the query
+        $query = DB::table('schedules')
+            ->join('users', 'users.id', '=', 'schedules.customer_id')
+            ->join('services', 'services.id', '=', 'schedules.service_id')
+            ->select('users.id as customer_id', 'services.id as service_id', 'services.name', 'services.cost', 'schedules.date');
+
+        // Apply conditions if provided
+        if ($customerId) {
+            $query->where('users.id', $customerId);
+        }
+
+        if ($serviceName) {
+            $query->where('services.name', $serviceName);
+        }
+        if ($serviceId) {
+            $query->where('services.name', $serviceId);
+        }
+
+        if ($serviceCost) {
+            $query->where('services.cost', $serviceCost);
+        }
+
+        if ($startDate && $endDate) {
+            $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->format('Y-m-d');
+            $endDate = Carbon::createFromFormat('Y-m-d', $endDate)->format('Y-m-d');
+            $query->where(function ($dateQuery) use ($startDate, $endDate) {
+                $dateQuery->where('schedules.date', '<=', $endDate)
+                    ->where('schedules.date', '>=', $startDate);
+            });
+        }
+
+        // Get the results
+        $results = $query->paginate(10);;
+
+        $services = Service::all();
+
+        return view('managers.customer_statis', compact('results', 'services'));
+    }
+
+    public function exportCustomer(Request $request)
+    {
+        // Retrieve query parameters from the request
+        $customerId = $request->input('customer_id');
+        $serviceName = $request->input('service_name');
+        $serviceId = $request->input('service_id');
+        $serviceCost = $request->input('service_cost');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        // Build the query
+        $query = DB::table('schedules')
+            ->join('users', 'users.id', '=', 'schedules.customer_id')
+            ->join('services', 'services.id', '=', 'schedules.service_id')
+            ->select('users.id as customer_id', 'services.id as service_id', 'services.name', 'services.cost', 'schedules.date');
+
+        // Apply conditions if provided
+        if ($customerId) {
+            $query->where('users.id', $customerId);
+        }
+
+        if ($serviceName) {
+            $query->where('services.name', $serviceName);
+        }
+        if ($serviceId) {
+            $query->where('services.name', $serviceId);
+        }
+
+        if ($serviceCost) {
+            $query->where('services.cost', $serviceCost);
+        }
+
+        if ($startDate && $endDate) {
+            $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->format('Y-m-d');
+            $endDate = Carbon::createFromFormat('Y-m-d', $endDate)->format('Y-m-d');
+            $query->where(function ($dateQuery) use ($startDate, $endDate) {
+                $dateQuery->where('schedules.date', '<=', $endDate)
+                    ->where('schedules.date', '>=', $startDate);
+            });
+        }
+
+        // Get the results
+        $results = $query->get();
+
+        return view('managers.export_customer', compact('results'));
+    }
+
+    public function exportWord(Request $request)
+    {
+        $results = json_decode($request->input('results'), true);
+
+        $phpWord = new PhpWord();
+        $section = $phpWord->addSection();
+
+        // Add title
+        $section->addText(
+            'Mẫu thống kê khách hàng',
+            ['name' => 'Arial', 'size' => 16, 'bold' => true, 'alignment' => 'center']
+        );
+
+        // Add table
+        $table = $section->addTable(['borderSize' => 6, 'borderColor' => '999999', 'cellMargin' => 80]);
+
+        // Add header row
+        $table->addRow();
+        $table->addCell(2000)->addText('Mã KH', ['bold' => true]);
+        $table->addCell(2000)->addText('Mã dịch vụ', ['bold' => true]);
+        $table->addCell(4000)->addText('Tên dịch vụ', ['bold' => true]);
+        $table->addCell(2000)->addText('Giá dịch vụ', ['bold' => true]);
+        $table->addCell(2000)->addText('Ngày khám', ['bold' => true]);
+
+        // Add data rows
+        foreach ($results as $result) {
+            $table->addRow();
+            $table->addCell(2000)->addText('KH' . $result['customer_id']);
+            $table->addCell(2000)->addText('DV' . $result['service_id']);
+            $table->addCell(4000)->addText($result['name']);
+            $table->addCell(2000)->addText($result['cost'] . ' VND');
+            $table->addCell(2000)->addText($result['date']);
+        }
+
+        // Save file
+        $fileName = 'customer_statistics.docx';
+        $tempFile = tempnam(sys_get_temp_dir(), $fileName);
+        $phpWord->save($tempFile, 'Word2007');
+
+        return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
+    }
+
+    public function pet(Request $request)
+    {
+        // Retrieve query parameters from the request
+        $pet_id = $request->input('pet_id');
+        $species = $request->input('species');
+        $name = $request->input('name');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $sex = $request->input('sex');
+
+        // Build the query
+        $query = DB::table('users')
+            ->join('schedules', 'users.id', '=', 'schedules.customer_id')
+            ->join('pets', 'users.id', '=', 'pets.customer_id')
+            ->select('pets.id as pet_id', 'pets.species', 'pets.name', 'pets.sex', 'schedules.date');
+        // Apply conditions if provided
+        if ($pet_id) {
+            $query->where('pets.id', $pet_id);
+        }
+
+        if ($species) {
+            $query->where('pets.species', $species);
+        }
+        if ($name) {
+            $query->where('pets.name', $name);
+        }
+        if ($sex) {
+            $query->where('pets.sex', $sex);
+        }
+
+        if ($startDate && $endDate) {
+            $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->format('Y-m-d');
+            $endDate = Carbon::createFromFormat('Y-m-d', $endDate)->format('Y-m-d');
+            $query->where(function ($dateQuery) use ($startDate, $endDate) {
+                $dateQuery->where('schedules.date', '<=', $endDate)
+                    ->where('schedules.date', '>=', $startDate);
+            });
+        }
+
+        // Get the results
+        $results = $query->paginate(5);
+
+        return view('managers.pet_stats', compact('results'));
+    }
+
+    public function exportPet(Request $request)
+    {
+        // Retrieve query parameters from the request
+        $pet_id = $request->input('pet_id');
+        $species = $request->input('species');
+        $name = $request->input('name');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $sex = $request->input('sex');
+
+        // Build the query
+        $query = DB::table('users')
+            ->join('schedules', 'users.id', '=', 'schedules.customer_id')
+            ->join('pets', 'users.id', '=', 'pets.customer_id')
+            ->select('pets.id as pet_id', 'pets.species', 'pets.name', 'pets.sex', 'schedules.date');
+        // Apply conditions if provided
+        if ($pet_id) {
+            $query->where('pets.id', $pet_id);
+        }
+
+        if ($species) {
+            $query->where('pets.species', $species);
+        }
+        if ($name) {
+            $query->where('pets.name', $name);
+        }
+        if ($sex) {
+            $query->where('pets.sex', $sex);
+        }
+
+        if ($startDate && $endDate) {
+            $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->format('Y-m-d');
+            $endDate = Carbon::createFromFormat('Y-m-d', $endDate)->format('Y-m-d');
+            $query->where(function ($dateQuery) use ($startDate, $endDate) {
+                $dateQuery->where('schedules.date', '<=', $endDate)
+                    ->where('schedules.date', '>=', $startDate);
+            });
+        }
+
+        // Get the results
+        $results = $query->paginate(5);
+
+        return view('managers.export_pet', compact('results'));
+    }
+
+    public function exportPetWord(Request $request)
+    {
+        // Lấy dữ liệu từ request và giải mã JSON thành mảng
+        $results = json_decode($request->input('results'), true);
+        // Tạo đối tượng PhpWord
+        $phpWord = new PhpWord();
+        $section = $phpWord->addSection();
+
+        // Thêm tiêu đề vào section
+        $section->addText(
+            'Mẫu thống kê thú cưng',
+            ['name' => 'Arial', 'size' => 16, 'bold' => true, 'alignment' => 'center']
+        );
+
+        // Thêm bảng vào section
+        $table = $section->addTable(['borderSize' => 6, 'borderColor' => '999999', 'cellMargin' => 80]);
+        $table->addRow();
+        $table->addCell(2000)->addText('Mã', ['bold' => true]);
+        $table->addCell(2000)->addText('Tên', ['bold' => true]);
+        $table->addCell(2000)->addText('Giống loài', ['bold' => true]);
+        $table->addCell(2000)->addText('Tình trạng', ['bold' => true]);
+        $table->addCell(2000)->addText('Giới tính', ['bold' => true]);
+        $table->addCell(2000)->addText('Ngày chữa bệnh', ['bold' => true]);
+
+        // Thêm dữ liệu từ $results vào bảng
+        foreach ($results as $result) {
+            // Thêm một hàng mới vào bảng
+            $table->addRow();
+
+        }
+
+        // Lưu file và trả về response cho người dùng tải về
+        // Tên file để lưu
+        $fileName = 'pet_statistics.docx';
+
+        // Tạo tên tệp tạm thời và lưu tệp Word
+        $tempFilePath = tempnam(sys_get_temp_dir(), $fileName);
+        $phpWord->save($tempFilePath, 'Word2007');
+
+        // Trả về response để tải xuống và xóa file tạm thời sau khi gửi
+        return response()->download($tempFilePath, $fileName)->deleteFileAfterSend(true);
+    }
+
+    public function medicine(Request $request)
+    {
+        // Retrieve query parameters from the request
+        $id = $request->input('id');
+        $status = $request->input('status');
+        $name = $request->input('name');
+        $cost = $request->input('cost');
+        $manufacture_date = $request->input('manufacture_date');
+        $expiry_date = $request->input('expiry_date');
+        $quantity = $request->input('quantity');
+        $ngayNhap = $request->input('ngayNhap');
+
+        // Build the query
+        $query = DB::table('medicines')->select("id", "name", "quantity", "status", "cost", "manufacture_date", "expiry_date", "quantity", "created_at");
+        // Apply conditions if provided
+        if (!is_null($id)) {
+            $query->where('medicines.id', $id);
+        }
+        if (!is_null($status)) {
+            $query->where('medicines.status', $status);
+        }
+        if (!is_null($name)) {
+            $query->where('medicines.name', 'like', '%' . $name . '%');
+        }
+        if (!is_null($cost)) {
+            $query->where('medicines.cost', $cost);
+        }
+        if (!is_null($manufacture_date)) {
+            $query->where('medicines.manufacture_date', $manufacture_date);
+        }
+        if (!is_null($expiry_date)) {
+            $query->where('medicines.expiry_date', $expiry_date);
+        }
+        if (!is_null($quantity)) {
+            $query->where('medicines.quantity', $quantity);
+        }
+        if (!is_null($ngayNhap)) {
+            $query->where('medicines.created_by', $ngayNhap);
+        }
+
+        // Get the results with pagination
+        $results = $query->paginate(5);
+
+        // Return the view with results
+        return view('managers.medicine_stats', compact('results'));
+    }
+
+    public function exportMedicine(Request $request)
+    {
+        // Retrieve query parameters from the request
+        $id = $request->input('id');
+        $status = $request->input('status');
+        $name = $request->input('name');
+        $cost = $request->input('cost');
+        $manufacture_date = $request->input('manufacture_date');
+        $expiry_date = $request->input('expiry_date');
+        $quantity = $request->input('quantity');
+        $ngayNhap = $request->input('ngayNhap');
+
+        // Build the query
+        $query = DB::table('medicines')->select("id", "name", "quantity", "status", "cost", "manufacture_date", "expiry_date", "quantity", "created_at");
+        // Apply conditions if provided
+        if (!is_null($id)) {
+            $query->where('medicines.id', $id);
+        }
+        if (!is_null($status)) {
+            $query->where('medicines.status', $status);
+        }
+        if (!is_null($name)) {
+            $query->where('medicines.name', 'like', '%' . $name . '%');
+        }
+        if (!is_null($cost)) {
+            $query->where('medicines.cost', $cost);
+        }
+        if (!is_null($manufacture_date)) {
+            $query->where('medicines.manufacture_date', $manufacture_date);
+        }
+        if (!is_null($expiry_date)) {
+            $query->where('medicines.expiry_date', $expiry_date);
+        }
+        if (!is_null($quantity)) {
+            $query->where('medicines.quantity', $quantity);
+        }
+        if (!is_null($ngayNhap)) {
+            $query->where('medicines.created_by', $ngayNhap);
+        }
+
+        // Get the results with pagination
+        $results = $query->paginate(5);
+
+        // Return the view with results
+        return view('managers.export_medicine', compact('results'));
+    }
+
+    public function exportMedicineWord(Request $request, Medicine $results)
+    {
+        print_r($results
+        );
+
+//        $phpWord = new PhpWord();
+//        $section = $phpWord->addSection();
+//
+//        $table = $section->addTable();
+//        $table->addRow();
+//        $table->addCell()->addText('Mã');
+//        $table->addCell()->addText('Tên');
+//        $table->addCell()->addText('SL');
+//        $table->addCell()->addText('T.Thái');
+//        $table->addCell()->addText('Giá');
+//        $table->addCell()->addText('Ngày sản xuất');
+//        $table->addCell()->addText('Hạn sử dụng');
+//        $table->addCell()->addText('Ngày nhập');
+//
+//        foreach ($results as $result) {
+//            $table->addRow();
+//            $table->addCell()->addText($result['id']);
+//            $table->addCell()->addText($result['name']);
+//            $table->addCell()->addText($result['quantity']);
+//            $table->addCell()->addText($result['status'] == 0 ? 'Còn' : 'Hết');
+//            $table->addCell()->addText($result['cost']);
+//            $table->addCell()->addText($result['manufacture_date']);
+//            $table->addCell()->addText($result['expiry_date']);
+//            $table->addCell()->addText(date('d/m/Y', strtotime($result['created_at'])));
+//        }
+//
+//        $fileName = 'medicine.docx';
+//        $tempFile = tempnam(sys_get_temp_dir(), $fileName);
+//        $phpWord->save($tempFile, 'Word2007');
+//
+//        return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
     }
 
 }

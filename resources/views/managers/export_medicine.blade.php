@@ -149,28 +149,34 @@
                 <img class="w-30 h-30" style="width: 40px" src="../../img/logo.jpg" alt=""></span>
             </div>
             <div class="p-4">
-                <h3 class="text-center fw-2 p-4">Mẫu thống kê khách hàng</h3>
+                <h3 class="text-center fw-2 p-4">Mẫu thống kê thuốc thú y</h3>
                 <table class="table table-bordered">
                     <thead class="table-light">
                     <tr>
-                        <th scope="col" style="background-color: #9adafe ">Mã KH</th>
-                        <th scope="col " style="background-color: #9adafe ">Mã dịch vụ</th>
-                        <th scope="col" style="background-color: #9adafe ">Tên dịch vụ</th>
-                        <th scope="col" style="background-color: #9adafe ">Giá dịch vụ</th>
-                        <th scope="col" style="background-color: #9adafe ">Ngày khám</th>
-
+                        <th scope="col" style="background-color: #9adafe ">Mã</th>
+                        <th scope="col " style="background-color: #9adafe ">Tên</th>
+                        <th scope="col" style="background-color: #9adafe ">SL</th>
+                        <th scope="col" style="background-color: #9adafe ">T.Thái</th>
+                        <th scope="col" style="background-color: #9adafe ">Giá</th>
+                        <th scope="col" style="background-color: #9adafe ">Ngày sản xuất</th>
+                        <th scope="col" style="background-color: #9adafe ">Hạn sử dụng</th>
+                        <th scope="col" style="background-color: #9adafe ">Ngày nhập</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($results as $result)
                         <tr>
-                            <td>KH{{$result->customer_id}}</td>
-                            <td>DV{{$result->service_id}}</td>
+                            <td>{{$result->id}}</td>
                             <td>{{$result->name}}</td>
-                            <td>{{$result->cost}} VND</td>
-                            <td>{{$result->date}}</td>
+                            <td>{{$result->quantity}}</td>
+                            <td>{{$result->status ==0 ? "Còn" : "Hết"}}</td>
+                            <td>{{$result->cost}}</td>
+                            <td>{{$result->manufacture_date}}</td>
+                            <td>{{$result->expiry_date}}</td>
+                            <td>{{date('d/m/Y', strtotime($result->created_at))}}</td>
                         </tr>
                     @endforeach
+
                     </tbody>
                 </table>
                 <div>
@@ -199,9 +205,9 @@
         </div>
     </div>
 </div>
-<form id="exportForm" action="{{ route('export.customer.word') }}" method="POST" style="display: none;">
+<form id="exportForm" action="{{ route('export.medicine.word', $results) }}" method="POST" style="display: none;">
     @csrf
-    <input type="hidden" name="results" id="resultsInput" value="{{ json_encode($results) }}">
+    <input type="hidden" name="results" id="resultsInput" >
 </form>
 
 <script>

@@ -1,0 +1,46 @@
+.header-upper {
+    background-color: #9ADAFE;
+    padding-block: 4px;
+
+}
+.header-upper .nav .nav-link {
+    font-weight: 500;
+    font-size: 17px;
+    color: black;
+}
+
+.upper-contact a {
+    color: #000;
+}
+/*.header-middle .nav-item>img {*/
+/*    width: 70%;*/
+/*}*/
+.cta-section {
+    --webkit-box-shadow: 3.5px 1px 8px -11px #dddddd;
+    -moz-box-shadow: 3.5px 1px 8px -11px #dddddd;
+    box-shadow: 3.5px 1px 8px -11px #dddddd;
+    background-color:#9ADAFE;
+    padding: 75px 60px ;
+    border-radius: 10px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.cta-section h6{
+    font-size: 20px;
+    line-height: 27px;
+}
+.cta-section h2{
+
+    line-height: 45px;
+    font-weight: 600;
+
+}
+.form-section {
+    -webkit-box-shadow: 3.5px 1px 8px -11px #dddddd;
+    -moz-box-shadow: 3.5px 1px 8px -11px #dddddd;
+    box-shadow: 3.5px 1px 8px -11px #dddddd;
+    background-color: #d9d9d9 ;
+    padding: 20px;
+    border-radius: 10px;
+}

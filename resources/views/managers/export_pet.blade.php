@@ -4,18 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetHaven Animal Hospital</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css"
+          rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
         }
+
         .sidebar {
             background-color: #b8e5fe;
             height: 100vh;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             padding-top: 20px;
         }
+
         .sidebar span {
             display: block;
             text-align: center;
@@ -24,27 +28,33 @@
             margin-bottom: 20px;
             text-transform: uppercase;
         }
+
         .sidebar .bi {
             font-size: 25px;
             margin-right: 12px;
             vertical-align: middle;
         }
+
         .sidebar .nav-link {
             color: #000;
             font-size: 13px;
             margin-bottom: 10px;
             transition: background-color 0.3s, color 0.3s;
         }
+
         .sidebar .nav-link.active {
             background-color: #dddddd;
         }
+
         .sidebar .nav-link:hover {
             background-color: #dddddd;
             color: #000;
         }
+
         .container-fluid {
             padding-left: 0;
         }
+
         .header {
             background-color: #f8f9fa;
             padding: 10px 10px;
@@ -53,35 +63,44 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .header .username {
             font-weight: bold;
         }
+
         .p-4 {
             padding: 2rem !important;
         }
+
         .nav-tabs .nav-link {
             border: 1px solid #dee2e6;
             border-bottom-color: transparent;
         }
+
         .nav-tabs .nav-link.active {
             background-color: #fff;
             border-color: #dee2e6 #dee2e6 #fff;
         }
+
         .table {
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         .btn-primary {
             background-color: #0d6efd;
             border-color: #0d6efd;
         }
+
         .btn-primary:hover {
             background-color: #0b5ed7;
             border-color: #0a58ca;
         }
+
         .btn-danger {
             background-color: #dc3545;
             border-color: #dc3545;
         }
+
         .btn-danger:hover {
             background-color: #c82333;
             border-color: #bd2130;
@@ -129,12 +148,12 @@
                 <span class="fs-5">Nguyen The
                 <img class="w-30 h-30" style="width: 40px" src="../../img/logo.jpg" alt=""></span>
             </div>
-            <h3 class ="text-center fw-2 m-4 p-4">Mẫu thống kê thú cưng</h3>
+            <h3 class="text-center fw-2 m-4 p-4">Mẫu thống kê thú cưng</h3>
             <table class="table table-bordered">
-                <thead class="table-light"  >
-                <tr >
+                <thead class="table-light">
+                <tr>
                     <th scope="col" style="background-color: #9adafe ">Mã</th>
-                    <th scope="col " style="background-color: #9adafe ">Chủng loài</th>
+                    <th scope="col" style="background-color: #9adafe ">Tên</th>
                     <th scope="col" style="background-color: #9adafe ">Giống loài</th>
                     <th scope="col" style="background-color: #9adafe ">Tình trạng</th>
                     <th scope="col" style="background-color: #9adafe ">Giới tính</th>
@@ -142,25 +161,20 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>BS01</td>
-                    <td>Chó</td>
-                    <td>Golden Retriever</td>
-                    <td>Khỏe mạnh</td>
-                    <td>Đực</td>
-                    <td>26/5/2024</td>
-                </tr>
-                <tr>
-                    <td>NV01</td>
-                    <td>Mèo</td>
-                    <td>Ba Tư</td>
-                    <td>Khỏe mạnh</td>
-                    <td>Cái</td>
-                    <td>26/5/2024</td>
-                </tr>
+                @foreach($results as $result)
+                    <tr>
+                        <td>{{$result->pet_id}}</td>
+                        <td>{{$result->name}}</td>
+                        <td>{{$result->species}}</td>
+                        <td>Khỏe mạnh</td>
+                        <td>{{$result->sex ==0 ? "Đực":"Cái"}}</td>
+                        <td>{{$result->date}}</td>
+                @endforeach
                 </tbody>
             </table>
-            <div><button class="btn btn-primary float-end mt-3 me-3" id="btnXuatThongTin"> Xuất thông tin</button></div>
+            <div>
+                <button class="btn btn-primary float-end mt-3 me-3" id="btnXuatThongTin"> Xuất thông tin</button>
+            </div>
 
         </div>
     </div>
@@ -171,8 +185,10 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content text-center">
             <div class="modal-header justify-content-center position-relative">
-                <h5 class="modal-title w-100 text-center" id="exampleModalLabel" style ="flex: 1;text-align: center;">Thông báo</h5>
-                <button type="button" class="btn-close position-absolute end-0 me-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title w-100 text-center" id="exampleModalLabel" style="flex: 1;text-align: center;">
+                    Thông báo</h5>
+                <button type="button" class="btn-close position-absolute end-0 me-3" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 Xuất thông tin thành công.
@@ -183,11 +199,20 @@
         </div>
     </div>
 </div>
+<form id="exportForm" action="{{ route('export.pet.word') }}" method="POST" style="display: none;">
+    @csrf
+    <input type="hidden" name="results" id="resultsInput" value="{{ json_encode($results) }}">
+</form>
 
+<script>
+    document.getElementById('btnXuatThongTin').addEventListener('click', function () {
+        document.getElementById('exportForm').submit();
+    });
+</script>s
 
 <!--JS thông báo xuất thành công -->
 <script>
-    document.getElementById('btnXuatThongTin').addEventListener('click', function() {
+    document.getElementById('btnXuatThongTin').addEventListener('click', function () {
         var myModal = new bootstrap.Modal(document.getElementById('myModal'), {
             keyboard: false
         });

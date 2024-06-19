@@ -4,18 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetHaven Animal Hospital</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css"
+          rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
         }
+
         .sidebar {
             background-color: #b8e5fe;
             height: 100vh;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             padding-top: 20px;
         }
+
         .sidebar span {
             display: block;
             text-align: center;
@@ -24,28 +28,34 @@
             margin-bottom: 20px;
             text-transform: uppercase;
         }
+
         .sidebar .bi {
             font-size: 25px;
             margin-right: 12px;
             vertical-align: middle;
         }
+
         .sidebar .nav-link {
             color: #000;
             font-size: 13px;
             margin-bottom: 10px;
             transition: background-color 0.3s ease; /* Thêm hiệu ứng transition */
         }
+
         .sidebar .nav-link.active {
             background-color: #DDDDDD;
             color: #000;
         }
+
         .sidebar .nav-link:hover {
             background-color: #DDDDDD;
             color: #000;
         }
+
         .container-fluid {
             padding-left: 0;
         }
+
         .header {
             background-color: #f8f9fa;
             padding: 10px 20px;
@@ -54,35 +64,44 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .header .username {
             font-weight: bold;
         }
+
         .p-4 {
             padding: 2rem !important;
         }
+
         .nav-tabs .nav-link {
             border: 1px solid #dee2e6;
             border-bottom-color: transparent;
         }
+
         .nav-tabs .nav-link.active {
             background-color: #fff;
             border-color: #dee2e6 #dee2e6 #fff;
         }
+
         .table {
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         .btn-primary {
             background-color: #0d6efd;
             border-color: #0d6efd;
         }
+
         .btn-primary:hover {
             background-color: #0b5ed7;
             border-color: #0a58ca;
         }
+
         .btn-danger {
             background-color: #dc3545;
             border-color: #dc3545;
         }
+
         .btn-danger:hover {
             background-color: #c82333;
             border-color: #bd2130;
@@ -134,13 +153,17 @@
                 <h3 class="text-center mb-3">Sắp xếp lịch khám</h3>
                 <ul class="nav nav-tabs mb-3">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Lịch khám mới (2)</a>
+                        <a class="nav-link active" aria-current="page" href="{{ route('employees.schedulenew') }}">Lịch
+                            khám mới
+                            ({{ $statusCounts->where('status', 0)->first()->status_count ?? 0 }})</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Đã xác nhận (2)</a>
+                        <a class="nav-link" href="{{ route('employees.schedulecf') }}">Đã xác nhận
+                            ({{ $statusCounts->where('status', 1)->first()->status_count ?? 0 }})</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Đã hủy (2)</a>
+                        <a class="nav-link" href="{{ route('employees.schedulecancel') }}">Đã hủy
+                            ({{ $statusCounts->where('status', 2)->first()->status_count ?? 0 }})</a>
                     </li>
                 </ul>
                 <table class="table table-bordered">
@@ -149,34 +172,36 @@
                         <th>ID</th>
                         <th>Tên</th>
                         <th>Số điện thoại</th>
-                        <th>Email</th>
                         <th>Thời gian đặt</th>
                         <th>Hành động</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>7</td>
-                        <td>Nguyen The</td>
-                        <td>0123xxxxx</td>
-                        <td>hoanglyoko99@gmail.com</td>
-                        <td>02/06/2023, 09:09 AM</td>
-                        <td>
-                            <button class="btn btn-primary btn-sm">Xác nhận</button>
-                            <button class="btn btn-danger btn-sm">Hủy</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td>Quoc Huy</td>
-                        <td>0345xxxxx</td>
-                        <td>vanamaivip@gmail.com</td>
-                        <td>10/06/2023, 10:34 AM</td>
-                        <td>
-                            <button class="btn btn-primary btn-sm">Xác nhận</button>
-                            <button class="btn btn-danger btn-sm">Hủy</button>
-                        </td>
-                    </tr>
+                    @foreach($users as $user)
+                        <tr>
+                            <td>{{ $user->id }}</td>
+                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->phone }}</td>
+                            <td>{{$user->schedulesAsCustomer[0]->date}}</td>
+                            <td>
+                                <form action="{{ route('cf-update-build', $user->schedulesAsCustomer[0]->id) }}"
+                                      method="POST"
+                                      style="display:inline;">
+                                    @csrf
+                                    @method('PUT')
+                                    <button class="btn btn-primary btn-sm">Xác nhận</button>
+                                </form>
+                                <form id="cancelForm"
+                                      action="{{ route('cancel-update-build', $user->schedulesAsCustomer[0]->id) }}"
+                                      method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="text" id="cancelMessage" name="message" style="display: none"
+                                           value="">
+                                    <button class="btn btn-danger btn-sm">Hủy</button>
+                                </form>
+                            </td>
+                    @endforeach
                     </tbody>
                 </table>
             </div>
@@ -185,7 +210,8 @@
 </div>
 
 <!-- Modal xac nhan thanh cong -->
-<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -225,7 +251,8 @@
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="cancelReason" id="reason3" value="Khách hàng hủy yêu cầu">
+                    <input class="form-check-input" type="radio" name="cancelReason" id="reason3"
+                           value="Khách hàng hủy yêu cầu">
                     <label class="form-check-label" for="reason3">
                         Khách hàng hủy yêu cầu
                     </label>
@@ -249,7 +276,9 @@
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 <!-- JS thanh cong -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -257,14 +286,14 @@
         var confirmButtons = document.querySelectorAll('.btn-primary.btn-sm');
 
         // Thêm sự kiện click cho mỗi nút "Xác nhận"
-        confirmButtons.forEach(function(button) {
-            button.addEventListener('click', function() {
+        confirmButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
                 var confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'), {});
                 confirmationModal.show();
 
                 // Thêm sự kiện click cho nút "Xác nhận" trong modal
                 var confirmAppointmentButton = document.getElementById('confirmAppointmentButton');
-                confirmAppointmentButton.onclick = function() {
+                confirmAppointmentButton.onclick = function () {
                     confirmationModal.hide();
                     // Thực hiện các hành động xác nhận khác tại đây, ví dụ như gửi yêu cầu đến server
                     console.log('Lịch khám đã được xác nhận!');
@@ -280,14 +309,14 @@
         var confirmButtons = document.querySelectorAll('.btn-primary.btn-sm');
 
         // Thêm sự kiện click cho mỗi nút "Xác nhận"
-        confirmButtons.forEach(function(button) {
-            button.addEventListener('click', function() {
+        confirmButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
                 var confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'), {});
                 confirmationModal.show();
 
                 // Thêm sự kiện click cho nút "Xác nhận" trong modal
                 var confirmAppointmentButton = document.getElementById('confirmAppointmentButton');
-                confirmAppointmentButton.onclick = function() {
+                confirmAppointmentButton.onclick = function () {
                     confirmationModal.hide();
                     // Thực hiện các hành động xác nhận khác tại đây, ví dụ như gửi yêu cầu đến server
                     console.log('Lịch khám đã được xác nhận!');
@@ -299,14 +328,14 @@
         var cancelButtons = document.querySelectorAll('.btn-danger.btn-sm');
 
         // Thêm sự kiện click cho mỗi nút "Hủy"
-        cancelButtons.forEach(function(button) {
-            button.addEventListener('click', function() {
+        cancelButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
                 var cancelModal = new bootstrap.Modal(document.getElementById('cancelModal'), {});
                 cancelModal.show();
 
                 // Hiển thị ô nhập lý do khác nếu chọn "Lý do khác"
-                document.querySelectorAll('input[name="cancelReason"]').forEach(function(radio) {
-                    radio.addEventListener('change', function() {
+                document.querySelectorAll('input[name="cancelReason"]').forEach(function (radio) {
+                    radio.addEventListener('change', function () {
                         if (document.getElementById('reason4').checked) {
                             document.getElementById('otherReasonContainer').style.display = 'block';
                         } else {
@@ -317,7 +346,7 @@
 
                 // Thêm sự kiện click cho nút "Xác nhận" trong modal "Hủy"
                 var confirmCancelButton = document.getElementById('confirmCancelButton');
-                confirmCancelButton.onclick = function() {
+                confirmCancelButton.onclick = function () {
                     var selectedReason = document.querySelector('input[name="cancelReason"]:checked').value;
                     if (selectedReason === 'Lý do khác') {
                         selectedReason = document.getElementById('otherReason').value;
@@ -336,14 +365,14 @@
         var confirmButtons = document.querySelectorAll('.btn-primary.btn-sm');
 
         // Thêm sự kiện click cho mỗi nút "Xác nhận"
-        confirmButtons.forEach(function(button) {
-            button.addEventListener('click', function() {
+        confirmButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
                 var confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'), {});
                 confirmationModal.show();
 
                 // Thêm sự kiện click cho nút "Xác nhận" trong modal
                 var confirmAppointmentButton = document.getElementById('confirmAppointmentButton');
-                confirmAppointmentButton.onclick = function() {
+                confirmAppointmentButton.onclick = function () {
                     confirmationModal.hide();
                     // Thực hiện các hành động xác nhận khác tại đây, ví dụ như gửi yêu cầu đến server
                     console.log('Lịch khám đã được xác nhận!');
@@ -355,14 +384,14 @@
         var cancelButtons = document.querySelectorAll('.btn-danger.btn-sm');
 
         // Thêm sự kiện click cho mỗi nút "Hủy"
-        cancelButtons.forEach(function(button) {
-            button.addEventListener('click', function() {
+        cancelButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
                 var cancelModal = new bootstrap.Modal(document.getElementById('cancelModal'), {});
                 cancelModal.show();
 
                 // Hiển thị ô nhập lý do khác nếu chọn "Lý do khác"
-                document.querySelectorAll('input[name="cancelReason"]').forEach(function(radio) {
-                    radio.addEventListener('change', function() {
+                document.querySelectorAll('input[name="cancelReason"]').forEach(function (radio) {
+                    radio.addEventListener('change', function () {
                         if (document.getElementById('reason4').checked) {
                             document.getElementById('otherReasonContainer').style.display = 'block';
                         } else {
@@ -373,7 +402,7 @@
 
                 // Thêm sự kiện click cho nút "Xác nhận" trong modal "Hủy"
                 var confirmCancelButton = document.getElementById('confirmCancelButton');
-                confirmCancelButton.onclick = function() {
+                confirmCancelButton.onclick = function () {
                     var selectedReason = document.querySelector('input[name="cancelReason"]:checked').value;
                     if (selectedReason === 'Lý do khác') {
                         selectedReason = document.getElementById('otherReason').value;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Schedule;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -69,7 +70,11 @@ class ScheduleController extends Controller
     {
         //
     }
-
+    public function CreateBuild()
+    {
+        $services = Service::all();
+        return view('customer.booking', compact('services'));
+    }
     public function CfCfBuild(string $id)
     {
         // Find the schedule by ID

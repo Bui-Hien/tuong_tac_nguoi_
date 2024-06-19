@@ -4,18 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THỐNG KÊ THUỐC THÚ Y</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css"
+          rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
         }
+
         .sidebar {
             background-color: #b8e5fe;
             height: 100vh;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             padding-top: 20px;
         }
+
         .sidebar span {
             display: block;
             text-align: center;
@@ -24,28 +28,34 @@
             margin-bottom: 20px;
             text-transform: uppercase;
         }
+
         .sidebar .bi {
             font-size: 25px;
             margin-right: 12px;
             vertical-align: middle;
         }
+
         .sidebar .nav-link {
             color: #000;
             font-size: 13px;
             margin-bottom: 10px;
             transition: background-color 0.3s ease; /* Thêm hiệu ứng transition */
         }
+
         .sidebar .nav-link.active {
             background-color: #DDDDDD;
             color: #000;
         }
+
         .sidebar .nav-link:hover {
             background-color: #DDDDDD;
             color: #000;
         }
+
         .container-fluid {
             padding-left: 0;
         }
+
         .header {
             background-color: #f8f9fa;
             padding: 10px 10px;
@@ -54,39 +64,49 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .header .username {
             font-weight: bold;
         }
+
         .p-4 {
             padding: 2rem !important;
         }
+
         .nav-tabs .nav-link {
             border: 1px solid #dee2e6;
             border-bottom-color: transparent;
         }
+
         .nav-tabs .nav-link.active {
             background-color: #fff;
             border-color: #dee2e6 #dee2e6 #fff;
         }
+
         .table {
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         .btn-primary {
             background-color: #0d6efd;
             border-color: #0d6efd;
         }
+
         .btn-primary:hover {
             background-color: #0b5ed7;
             border-color: #0a58ca;
         }
+
         .btn-danger {
             background-color: #dc3545;
             border-color: #dc3545;
         }
+
         .btn-danger:hover {
             background-color: #c82333;
             border-color: #bd2130;
         }
+
         /* Ensure proper layout alignment */
         form .row {
             margin-left: 0;
@@ -176,31 +196,32 @@
                             <label for="maThuoc" class="form-label">Mã thuốc</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" id="maThuoc">
+                            <input type="text" class="form-control" id="maThuoc" name="id">
                         </div>
                         <div class="col-md-2">
                             <label for="Trangthai" class="form-label">Trạng thái</label>
                         </div>
                         <div class="col-md-4">
-                            <select id="Trangthai" class="form-select">
-                                <option selected>Chọn trạng thái..</option>
-                                <option value="1">Còn</option>
-                                <option value="2">Hết</option>
+                            <select id="Trangthai" class="form-select" name="status">
+                                <option value="" selected>Chọn trạng thái..</option>
+                                <option value="0">Còn</option>
+                                <option value="1">Hết</option>
                             </select>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-2">
-                            <label for="tenNhanVien" class="form-label">Tên nhân viên</label>
+                            <label for="tenNhanVien" class="form-label">Tên thuốc</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" id="tenNhanVien">
+                            <input type="text" class="form-control" id="tenNhanVien" name="name">
                         </div>
                         <div class="col-md-2">
                             <label for="giaThuoc" class="form-label">Giá thuốc</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" id="giaThuoc">
+                            <input type="text" class="form-control" id="giaThuoc" name="cost">
+
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -208,13 +229,13 @@
                             <label for="ngaySanXuat" class="form-label">Ngày sản xuất</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="date" class="form-control" id="ngaySanXuat">
+                            <input type="date" class="form-control" id="ngaySanXuat" name="manufacture_date">
                         </div>
                         <div class="col-md-2">
                             <label for="hanSuDung" class="form-label">Hạn sử dụng</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="date" class="form-control" id="hanSuDung">
+                            <input type="date" class="form-control" id="hanSuDung" name="expiry_date">
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -222,27 +243,28 @@
                             <label for="soLuong" class="form-label">Số lượng</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" id="soLuong">
+                            <input type="text" class="form-control" id="soLuong" name="quantity">
                         </div>
                         <div class="col-md-2">
                             <label for="ngayNhap" class="form-label">Ngày nhập</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="date" class="form-control" id="ngayNhap">
+                            <input type="date" class="form-control" id="ngayNhap" name="ngayNhap">
                         </div>
                     </div>
                     <div class="row mb-3 justify-content-center ">
                         <div class="col-auto">
-                            <button type="button" class="btn btn-secondary custom-button">Tìm kiếm</button>
+                            <button type="submit" class="btn btn-secondary custom-button">Tìm kiếm</button>
                         </div>
                         <div class="col-auto">
-                            <button type="button" class="btn btn-secondary custom-button">Xuất thông tin</button>
+                            <a href="#" onclick="exportResults()" class="btn btn-secondary custom-button">Xuất thông
+                                tin</a>
                         </div>
                     </div>
                 </form>
                 <table class="table table-bordered">
-                    <thead class="table-light"  >
-                    <tr >
+                    <thead class="table-light">
+                    <tr>
                         <th scope="col" style="background-color: #9adafe ">Mã</th>
                         <th scope="col " style="background-color: #9adafe ">Tên</th>
                         <th scope="col" style="background-color: #9adafe ">SL</th>
@@ -254,32 +276,44 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>MT001</td>
-                        <td>Thuốc ABC</td>
-                        <td>50</td>
-                        <td>Còn</td>
-                        <td>100,000 VNĐ</td>
-                        <td>2023-05-20</td>
-                        <td>2024-05-20</td>
-                        <td>2023-04-15</td>
-                    </tr>
-                    <tr>
-                        <td>MT002</td>
-                        <td>Thuốc XYZ</td>
-                        <td>20</td>
-                        <td>Hết</td>
-                        <td>150,000 VNĐ</td>
-                        <td>2022-12-10</td>
-                        <td>2023-12-10</td>
-                        <td>2022-11-20</td>
-                    </tr>
+                    @foreach($results as $result)
+                        <tr>
+                            <td>{{$result->id}}</td>
+                            <td>{{$result->name}}</td>
+                            <td>{{$result->quantity}}</td>
+                            <td>{{$result->status ==0 ? "Còn" : "Hết"}}</td>
+                            <td>{{$result->cost}}</td>
+                            <td>{{$result->manufacture_date}}</td>
+                            <td>{{$result->expiry_date}}</td>
+                            <td>{{date('d/m/Y', strtotime($result->created_at))}}</td>
+                        </tr>
+                    @endforeach
+
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
+<script>
+    function exportResults() {
+        var id = '{{ request()->input('id') }}' || '';
+        var status = '{{ request()->input('status') }}' || '';
+        var name = '{{ request()->input('name') }}' || '';
+        var cost = '{{ request()->input('cost') }}' || '';
+        var manufacture_date = '{{ request()->input('manufacture_date') }}' || '';
+        var expiry_date = '{{ request()->input('expiry_date') }}' || '';
+        var quantity = '{{ request()->input('quantity') }}' || '';
+        var ngayNhap = '{{ request()->input('ngayNhap') }}' || '';
+
+        // Build the query string
+        var queryString = `id=${encodeURIComponent(id)}&status=${encodeURIComponent(status)}&name=${encodeURIComponent(name)}&cost=${encodeURIComponent(cost)}&manufacture_date=${encodeURIComponent(manufacture_date)}&expiry_date=${encodeURIComponent(expiry_date)}&quantity=${encodeURIComponent(quantity)}&ngayNhap=${encodeURIComponent(ngayNhap)}`;
+
+        // Redirect to the new URL with query string
+        window.location.href = `/managers/export-medicine?${queryString}`;
+    }
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>

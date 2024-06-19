@@ -15,6 +15,8 @@ return new class extends Migration {
             $table->string('name');
             $table->string('type');
             $table->float('cost');
+            $table->integer('status');
+            $table->float('quantity');
             $table->date('manufacture_date');
             $table->date('expiry_date');
             $table->unsignedBigInteger('created_by')->nullable();

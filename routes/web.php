@@ -16,9 +16,11 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
 Route::get('/', function () {
-    return view('customer.booking');
+    return view('home');
+});
+Route::get('/lkfa', function () {
+    return view('managers.export_customer');
 });
 Route::get('/managers/employee', function () {
     return view('managers.employee_stats');
@@ -58,20 +60,47 @@ Route::middleware(['authManager'])->group(function () {
     Route::get('managers', [\App\Http\Controllers\UserController::class, 'manager']);
     Route::get('managers/create-employee', [\App\Http\Controllers\UserController::class, 'createEmployee']);
     Route::post('managers/create-employee', [\App\Http\Controllers\UserController::class, 'PostCreateEmployee'])->name('create-employee');
+    Route::delete('managers/delete-employee/{id}', [\App\Http\Controllers\UserController::class, 'DeleteEmployee'])->name('delete-employee');
+    Route::get('managers/accounts', [\App\Http\Controllers\UserController::class, 'ListEmployee']);
+
+    Route::get('managers/update-employee/{id}', [\App\Http\Controllers\UserController::class, 'EditEmployee']);
+    Route::put('managers/update-employee/{id}', [UserController::class, 'UpdateEmployee']);
+    Route::get('managers/search', [\App\Http\Controllers\UserController::class, 'search']);
+
+
+    Route::get('managers/customer', [\App\Http\Controllers\UserController::class, 'customer'])->name('managers.customer');
+    Route::get('managers/export-customer', [\App\Http\Controllers\UserController::class, 'exportCustomer']);
+    Route::post('managers/export-customer-word', [\App\Http\Controllers\UserController::class, 'exportWord'])->name('export.customer.word');
+
+
+    Route::get('managers/pet', [\App\Http\Controllers\UserController::class, 'pet'])->name('managers.pet');
+    Route::get('managers/export-pet', [\App\Http\Controllers\UserController::class, 'exportPet']);
+    Route::post('managers/export-pet-word', [\App\Http\Controllers\UserController::class, 'exportPetWord'])->name('export.pet.word');
+
+
+    Route::get('managers/medicine', [\App\Http\Controllers\UserController::class, 'medicine'])->name('managers.customer');
+    Route::get('managers/export-medicine', [\App\Http\Controllers\UserController::class, 'exportMedicine']);
+    Route::post('managers/export-medicine-word', [\App\Http\Controllers\UserController::class, 'exportMedicineWord'])->name('export.medicine.word');
 });
 Route::middleware(['authEmployee'])->group(function () {
-    Route::get('employees', [\App\Http\Controllers\UserController::class, 'employee']);
+    Route::get('employees/schedulenew', [UserController::class, 'schedulenew'])->name('employees.schedulenew');
+    Route::get('employees/schedulecf', [\App\Http\Controllers\UserController::class, 'schedulecf'])->name('employees.schedulecf');
+    Route::get('employees/schedulecancel', [\App\Http\Controllers\UserController::class, 'schedulecancel'])->name('employees.schedulecancel');
+
+
+    Route::put('employees/customers/{id}/cf-build', [\App\Http\Controllers\ScheduleController::class, 'CfCfBuild'])->name('cf-update-build');
+    Route::put('employees/customers/{id}/cancel-build', [\App\Http\Controllers\ScheduleController::class, 'CancelBuild'])->name('cancel-update-build');
+    Route::resource('employees/medicines', MedicineController::class);
+
+
 });
 Route::middleware(['authDoctor'])->group(function () {
-    Route::get('doctors', [\App\Http\Controllers\UserController::class, 'doctor']);
+    Route::resource('fdsa', \App\Http\Controllers\HealthRecordController::class);
+    Route::resource('doctors/schedules', \App\Http\Controllers\ScheduleController::class);
+    Route::get('doctors/manager/health_records', [\App\Http\Controllers\HealthRecordController::class, 'managerRecordHealth']);
+
 });
 
 
-Route::get('customers/create', [\App\Http\Controllers\UserController::class, 'CreateBuild']);
+Route::get('customer/booking', [\App\Http\Controllers\ScheduleController::class, 'CreateBuild']);
 Route::post('customers', [\App\Http\Controllers\UserController::class, 'StoreBuild'])->name('customers-store-build');
-
-
-
-// git add .
-// git commit -m "noi dung push"
-// git push origin kien
