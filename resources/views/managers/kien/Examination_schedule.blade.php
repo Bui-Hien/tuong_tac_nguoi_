@@ -16,14 +16,17 @@
             top: 0;
             left: 0;
         }
+
         .sidebar h6, .sidebar p {
             text-align: center;
             font-size: 23px;
         }
+
         .sidebar .divider {
             border-top: 1px solid black;
             margin: 10px 0;
         }
+
         .sidebar .btn {
             width: 100%;
             height: 60px;
@@ -31,9 +34,11 @@
             border: none;
             margin-top: 20px;
         }
+
         .sidebar .btn:hover {
             background-color: #DDDDDD;
         }
+
         .topbar {
             background-color: #f8f9fa;
             padding: 10px;
@@ -48,17 +53,21 @@
             height: 67px;
             z-index: 1000;
         }
+
         .main-content {
             margin-left: 200px;
             padding: 80px 20px 20px 20px;
         }
+
         .table th, .table td {
             text-align: center;
         }
+
         .table .btn {
             background-color: #33CCFF;
             color: white;
         }
+
         #infoModal {
             display: none;
             position: fixed;
@@ -71,33 +80,59 @@
             z-index: 2000;
             width: 600px;
         }
+
+        #infoModal h4 {
+            justify-content: center;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
         #infoModal .form-group {
             margin-bottom: 15px;
         }
+
         #infoModal .form-row {
             display: flex;
             justify-content: space-between;
         }
+
         #infoModal .form-group label {
             display: block;
+            text-align: left;
         }
+
         #infoModal .form-group input {
             width: 100%;
             padding: 5px;
             box-sizing: border-box;
+            background-color: #f0f0f0;
+            pointer-events: none;
         }
-        #infoModal .close {
-            background: #ccc;
+
+        #infoModal .close-btn {
+            background: #888888;
+            color: white;
             padding: 5px 10px;
             cursor: pointer;
             border: none;
             margin-top: 10px;
+            float: right;
         }
+
+        #infoModal .close-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
         .sidebar h6 {
             display: flex;
             justify-content: center;
             align-items: center;
         }
+
         .sidebar h6 i {
             margin-right: 8px;
         }
@@ -109,13 +144,15 @@
         <h6><i class="fas fa-user-md"></i>Bác sĩ</h6>
     </div>
     <div class="divider"></div>
-    <button class="btn"><i class="fas fa-calendar-alt p-2"></i> Xem lịch khám</button>
-    <button class="btn"><i class="fas fa-book-medical p-1"></i> Quản lý sổ khám bệnh</button>
+    <a href="{{ route('doctors.health-record') }}" class="btn active"><i class="fas fa-calendar-alt p-2"></i> Xem lịch
+        khám</a>
+    <a href="{{ route('doctors.healthcares') }}" class="btn active"><i class="fas fa-book-medical p-1"></i> Quản lý sổ
+        khám bệnh</a>
 </div>
 <div class="topbar">
     <div class="user-info">
+        <span class="fs-4 text-uppercase">{{Session::get("name")}}</span>
         <img src="https://via.placeholder.com/30" class="rounded-circle" alt="User">
-        <span>Quốc Huy</span>
     </div>
 </div>
 <div class="main-content">
@@ -138,7 +175,9 @@
             <td>Thăm khám</td>
             <td>Mèo</td>
             <td>22/05/2023, 07:19 Sáng</td>
-            <td><button class="btn xem-thong-tin">Xem thông tin</button></td>
+            <td>
+                <button class="btn xem-thong-tin">Xem thông tin</button>
+            </td>
         </tr>
         <tr>
             <td>2</td>
@@ -146,7 +185,9 @@
             <td>Tắm</td>
             <td>Chó</td>
             <td>12/06/2023, 13:19 Chiều</td>
-            <td><button class="btn xem-thong-tin">Xem thông tin</button></td>
+            <td>
+                <button class="btn xem-thong-tin">Xem thông tin</button>
+            </td>
         </tr>
         <tr>
             <td>3</td>
@@ -154,7 +195,9 @@
             <td>Tia lông</td>
             <td>Mèo</td>
             <td>31/05/2023, 19:19 Tối</td>
-            <td><button class="btn xem-thong-tin">Xem thông tin</button></td>
+            <td>
+                <button class="btn xem-thong-tin">Xem thông tin</button>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -162,6 +205,7 @@
 
 <!-- Information Modal -->
 <div id="infoModal">
+    <span class="close-icon">&times;</span>
     <h4>Thông tin lịch khám bệnh</h4>
     <div class="form-row">
         <div class="form-group" style="width: 45%;">
@@ -193,17 +237,18 @@
             <input type="text" id="ghiChu" readonly>
         </div>
     </div>
-    <button class="close">Đóng</button>
+    <button class="close-btn">Đóng</button>
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const infoModal = document.getElementById('infoModal');
-        const closeModal = infoModal.querySelector('.close');
+        const closeModal = infoModal.querySelector('.close-btn');
+        const closeIcon = infoModal.querySelector('.close-icon');
         const xemThongTinButtons = document.querySelectorAll('.xem-thong-tin');
 
         xemThongTinButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const row = this.closest('tr');
                 const maKH = row.cells[0].innerText;
                 const tenKH = row.cells[1].innerText;
@@ -221,7 +266,11 @@
             });
         });
 
-        closeModal.addEventListener('click', function() {
+        closeModal.addEventListener('click', function () {
+            infoModal.style.display = 'none';
+        });
+
+        closeIcon.addEventListener('click', function () {
             infoModal.style.display = 'none';
         });
     });

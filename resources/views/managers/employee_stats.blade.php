@@ -133,29 +133,29 @@
         <div class="col-md-2 sidebar mt-0">
             <div class="d-flex flex-column p-3 pt-0">
                 <div class="mt-0">
-                    <span> <i class="bi bi-person-circle"></i>BAC SI</span>
+                    <span> <i class="bi bi-person-circle"></i>QUẢN LÝ</span>
                 </div>
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link active" href="{{ route('managers.employee') }}">
                             <i class="bi bi-calendar-check"></i>
                             Thống kê nhân viên
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a class="nav-link active" href="#">
+                        <a class="nav-link " href="{{ route('managers.medicine') }}">
                             <i class="bi bi-calendar-plus"></i>
                             Thống kê thuốc thú Y
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link " href="{{ route('managers.customer') }}">
                             <i class="bi bi-calendar-check"></i>
                             Thống kê khách hàng
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link " href="{{ route('managers.pet') }}">
                             <i class="bi bi-calendar-check"></i>
                             Thống kê thú cưng
                         </a>
@@ -165,7 +165,7 @@
         </div>
         <div class="col-md-10 p-0 ">
             <div class="header d-flex justify-content-end ms-0 ps-0">
-                <span class="fs-5">Nguyen The
+                 <span class="fs-4 text-uppercase">{{Session::get("name")}}
                 <img class="w-30 h-30" style="width: 40px" src="../../img/logo.jpg" alt=""></span>
             </div>
             <div class="p-4">
@@ -256,24 +256,25 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>BS01</td>
-                        <td>Đẩu Thế</td>
-                        <td>Nam</td>
-                        <td>Bác sĩ</td>
-                        <td>26/5/2024</td>
-                        <td>09xxxxxxxx</td>
-                        <td>bbb@gmail.com</td>
-                    </tr>
-                    <tr>
-                        <td>NV01</td>
-                        <td>Xuân Hiền</td>
-                        <td>Nam</td>
-                        <td>Bác sĩ</td>
-                        <td>26/5/2024</td>
-                        <td>09xxxxxxxx</td>
-                        <td>ccc@gmail.com</td>
-                    </tr>
+                    @foreach($results as $result)
+                        <tr class="clickable-row" data-id="{{ $result->id }}">
+                            <td>{{ $result->id }}</td>
+                            <td>{{ $result->name }}</td>
+                            <td>{{ $result->sex == 0 ? 'Nam' : 'Nữ' }}</td>
+                            <td>
+                                @if($result->userRules->isNotEmpty())
+                                    @foreach($result->userRules as $userRule)
+                                        {{ $userRule->rule->id }}
+                                    @endforeach
+                                @else
+                                    No rules
+                                @endif
+                            </td>
+                            <td>{{ $result->created_at }}</td>
+                            <td>{{ $result->phone != null ? $result->phone : 'null' }}</td>
+                            <td>{{ $result->email }}</td>
+                        </tr>
+                    @endforeach
                     </tbody>
                 </table>
 

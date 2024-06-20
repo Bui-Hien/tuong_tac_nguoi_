@@ -17,31 +17,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/', function () {
-    return view('home');
-});
-Route::get('/lkfa', function () {
-    return view('managers.export_customer');
-});
-Route::get('/managers/employee', function () {
-    return view('managers.employee_stats');
-});
-
-Route::get('/managers/medicine', function () {
-    return view('managers.medicine_stats');
-});
-
-Route::get('/managers/mana_empl', function () {
-    return view('managers.kien.manager_employee');
-});
-
-Route::get('/managers/healthcares', function () {
-    return view('managers.kien.healthcares');
-});
-
-Route::get('/managers/exa', function () {
-    return view('managers.kien.Examination_schedule');
-});
-
+    return view('customer.home');
+})->name('home');
 
 Route::get('logout', [CustomAuthController::class, 'logout']);
 
@@ -78,10 +55,15 @@ Route::middleware(['authManager'])->group(function () {
     Route::post('managers/export-pet-word', [\App\Http\Controllers\UserController::class, 'exportPetWord'])->name('export.pet.word');
 
 
-    Route::get('managers/medicine', [\App\Http\Controllers\UserController::class, 'medicine'])->name('managers.customer');
+    Route::get('managers/medicine', [\App\Http\Controllers\UserController::class, 'medicine'])->name('managers.medicine');
     Route::get('managers/export-medicine', [\App\Http\Controllers\UserController::class, 'exportMedicine']);
-    Route::post('managers/export-medicine-word', [\App\Http\Controllers\UserController::class, 'exportMedicineWord'])->name('export.medicine.word');
+    Route::post('managers/export-medicine-word', [UserController::class, 'exportMedicineWord'])->name('export.medicine.word');
+
+    Route::get('managers/employee', [\App\Http\Controllers\UserController::class, 'employee'])->name('managers.employee');
+    Route::get('managers/export-employee', [\App\Http\Controllers\UserController::class, 'exportEmployee']);
+    Route::post('managers/export-employee-word', [UserController::class, 'exportEmployeeWord'])->name('export.employee.word');
 });
+
 Route::middleware(['authEmployee'])->group(function () {
     Route::get('employees/schedulenew', [UserController::class, 'schedulenew'])->name('employees.schedulenew');
     Route::get('employees/schedulecf', [\App\Http\Controllers\UserController::class, 'schedulecf'])->name('employees.schedulecf');
@@ -95,12 +77,19 @@ Route::middleware(['authEmployee'])->group(function () {
 
 });
 Route::middleware(['authDoctor'])->group(function () {
-    Route::resource('fdsa', \App\Http\Controllers\HealthRecordController::class);
+    Route::resource('health_records', \App\Http\Controllers\HealthRecordController::class);
     Route::resource('doctors/schedules', \App\Http\Controllers\ScheduleController::class);
     Route::get('doctors/manager/health_records', [\App\Http\Controllers\HealthRecordController::class, 'managerRecordHealth']);
 
+    Route::get('/doctors/health-record', function () {
+        return view('managers.kien.Examination_schedule');
+    })->name('doctors.health-record');
+    Route::get('/doctors/healthcares', function () {
+        return view('managers.kien.healthcares');
+    })->name('doctors.healthcares');
 });
 
 
-Route::get('customer/booking', [\App\Http\Controllers\ScheduleController::class, 'CreateBuild']);
+Route::get('customer/booking', [\App\Http\Controllers\ScheduleController::class, 'CreateBuild'])->name('booking'
+);
 Route::post('customers', [\App\Http\Controllers\UserController::class, 'StoreBuild'])->name('customers-store-build');

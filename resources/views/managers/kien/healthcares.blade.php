@@ -63,7 +63,7 @@
             margin-bottom: 15px;
         }
         .form-group label {
-            width: 30%;
+            width: 50%;
         }
         .form-left, .form-right {
             width: 48%;
@@ -128,14 +128,18 @@
             background-color: rgb(0,0,0);
             background-color: rgba(0,0,0,0.4);
         }
+
         .modal-content {
+            position: relative;
             background-color: #fefefe;
-            margin: 15% auto;
+            margin: 10% auto; /* Adjusted to be closer to the top */
             padding: 20px;
             border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
+            width: 90%; /* Increased width for a larger form */
+            max-width: 700px; /* Increased max-width for a larger form */
+            text-align: left;
         }
+
         .modal-content.center-text {
             text-align: center;
         }
@@ -163,21 +167,49 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
+            gap: 20px; /* Added gap between left and right sections */
         }
-        .modal-content .form-left, .modal-content .form-right {
+
+        .modal-content .form-left,
+        .modal-content .form-right {
             width: 48%;
         }
+
         .modal-content .form-group {
             display: flex;
-            align-items: center;
+            flex-direction: column;
             margin-bottom: 15px;
         }
+
         .modal-content .form-group label {
-            width: 40%;
+            margin-bottom: 5px;
+            text-align: left;
+            margin-left: 0; /* Align labels to the left edge of the form group */
+            padding-left: 0; /* Ensure no padding on the left */
         }
+
         .modal-content .form-group input {
-            width: 60%;
+            width: 100%;
         }
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover, .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
     </style>
 </head>
 <body>
@@ -186,13 +218,13 @@
         <h6><i class="fas fa-user-md"></i> Bác sĩ</h6>
     </div>
     <div class="divider"></div>
-    <button class="btn"><i class="fas fa-calendar-alt p-2"></i> Xem lịch khám</button>
-    <button class="btn"><i class="fas fa-book-medical p-1"></i> Quản lý sổ khám bệnh</button>
+    <a href="{{ route('doctors.health-record') }}" class="btn active"><i class="fas fa-calendar-alt p-2"></i> Xem lịch khám</a>
+    <a href="{{ route('doctors.healthcares') }}" class="btn"><i class="fas fa-book-medical p-1"></i> Quản lý sổ khám bệnh</a>
 </div>
 <div class="topbar">
     <div class="user-info">
+        <span class="fs-4 text-uppercase">{{Session::get("name")}}</span>
         <img src="https://via.placeholder.com/30" class="rounded-circle" alt="User">
-        <span>Quốc Huy</span>
     </div>
 </div>
 <div class="main-content">
@@ -285,7 +317,7 @@
 <div id="confirmationModal" class="modal">
     <div class="modal-content">
         <h5>Xác nhận sửa thông tin</h5>
-        <p>Bạn có muốn <span id="actionType"></span> thông tin tài khoản không?</p>
+        <p>Bạn có muốn <span id="actionType"></span> sổ khám không?</p>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" onclick="closeModal('confirmationModal')">Hủy</button>
             <button type="button" class="btn confirm-btn" id="confirmBtn" onclick="confirmAction()">Xác nhận</button>
@@ -296,7 +328,7 @@
 <div id="successModal" class="modal">
     <div class="modal-content center-text">
         <h5>Thông báo</h5>
-        <p id="successMessage">Cập nhật tài khoản thành công!</p>
+        <p id="successMessage">Cập nhật thành công!</p>
         <div class="modal-footer center">
             <button type="button" class="btn btn-secondary" onclick="closeModal('successModal')">Xong</button>
         </div>
@@ -331,33 +363,34 @@
 <!-- Form Xem thong tin -->
 <div id="infoModal" class="modal">
     <div class="modal-content">
-        <h5>Thông tin sổ khám bệnh</h5>
+        <span class="close" onclick="closeModal('infoModal')">&times;</span>
+        <h5 class="modal-title">Thông tin sổ khám bệnh</h5>
         <div class="form-section">
             <div class="form-left">
-                <div class="form-group" style="width: 45%;">
-                    <label>Mã số:</label>
+                <div class="form-group" style="width: 100%;">
+                    <label for="infoMaSo">Mã số:</label>
                     <input type="text" class="form-control" id="infoMaSo" readonly>
                 </div>
-                <div class="form-group" style="width: 45%;">
-                    <label>Tên khách hàng:</label>
+                <div class="form-group" style="width: 100%;">
+                    <label for="infoTenKhachHang">Tên khách hàng:</label>
                     <input type="text" class="form-control" id="infoTenKhachHang" readonly>
                 </div>
-                <div class="form-group" style="width: 45%;">
-                    <label>Ngày cấp sổ:</label>
+                <div class="form-group" style="width: 100%;">
+                    <label for="infoNgayCapSo">Ngày cấp sổ:</label>
                     <input type="text" class="form-control" id="infoNgayCapSo" readonly>
                 </div>
             </div>
             <div class="form-right">
-                <div class="form-group" style="width: 45%;">
-                    <label>Số điện thoại:</label>
+                <div class="form-group" style="width: 100%;">
+                    <label for="infoSoDienThoai">Số điện thoại:</label>
                     <input type="text" class="form-control" id="infoSoDienThoai" readonly>
                 </div>
-                <div class="form-group" style="width: 45%;">
-                    <label>Loại thú cưng:</label>
+                <div class="form-group" style="width: 100%;">
+                    <label for="infoLoaiThuCung">Loại thú cưng:</label>
                     <input type="text" class="form-control" id="infoLoaiThuCung" readonly>
                 </div>
-                <div class="form-group" style="width: 45%;">
-                    <label>Giống thú cưng:</label>
+                <div class="form-group" style="width: 100%;">
+                    <label for="infoGiongThuCung">Giống thú cưng:</label>
                     <input type="text" class="form-control" id="infoGiongThuCung" readonly>
                 </div>
             </div>
@@ -367,6 +400,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Xem thong tin -->
 <script>

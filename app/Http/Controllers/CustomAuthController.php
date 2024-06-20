@@ -65,7 +65,8 @@ class CustomAuthController extends Controller
                 if ($user->userRules->contains('rule_id', 3)) {
                     $request->session()->put('loginId', $user->id);
                     $request->session()->put('roleId', 3);
-                    return redirect('/managers');
+                    $request->session()->put('name', $user->name);
+                    return redirect('/managers/employee');
                 } else {
                     // Rule_id is not equal to 3, user does not have required permission
                     return back()->with('fail', 'User does not have required permission');
@@ -91,7 +92,8 @@ class CustomAuthController extends Controller
                     // Proceed with the login process
                     $request->session()->put('loginId', $user->id);
                     $request->session()->put('roleId', 1);
-                    return redirect('/employees');
+                    $request->session()->put('name', $user->name);
+                    return redirect('/employees/schedulenew');
                 } else {
                     return back()->with('fail', 'User does not have required permission');
                 }
@@ -115,6 +117,7 @@ class CustomAuthController extends Controller
                 if ($user->userRules->contains('rule_id', 2)) {
                     $request->session()->put('loginId', $user->id);
                     $request->session()->put('roleId', 2);
+                    $request->session()->put('name', $user->name);
                     return redirect('/doctors');
                 } else {
                     return back()->with('fail', 'User does not have required permission');

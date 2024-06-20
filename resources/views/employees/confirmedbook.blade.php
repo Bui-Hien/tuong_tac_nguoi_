@@ -118,27 +118,21 @@
                 </div>
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2">
-                        <a class="nav-link" href="#">
-                            <i class="bi bi-calendar-check"></i>
-                            Thống kê nhân viên
-                        </a>
-                    </li>
-                    <li class="nav-item mb-2">
                         <a class="nav-link active" href="#">
                             <i class="bi bi-calendar-plus"></i>
-                            Thống kê thuốc thú Y
+                            Sử lý yêu cầu đặt lịch
                         </a>
                     </li>
                     <li class="nav-item mb-2">
                         <a class="nav-link" href="#">
                             <i class="bi bi-calendar-check"></i>
-                            Thống kê khách hàng
+                            Tạo lịch khám bệnh
                         </a>
                     </li>
                     <li class="nav-item mb-2">
                         <a class="nav-link" href="#">
                             <i class="bi bi-calendar-check"></i>
-                            Thống kê thú cưng
+                            Quản lý thuốc thú y
                         </a>
                     </li>
                 </ul>

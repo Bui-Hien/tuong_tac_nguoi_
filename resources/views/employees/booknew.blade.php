@@ -114,31 +114,25 @@
         <div class="col-md-2 sidebar mt-0">
             <div class="d-flex flex-column p-3 pt-0">
                 <div class="mt-0">
-                    <span> <i class="bi bi-person-circle"></i>BAC SI</span>
+                    <span> <i class="bi bi-person-circle"></i>NHÂN VIÊN</span>
                 </div>
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2">
-                        <a class="nav-link" href="#">
-                            <i class="bi bi-calendar-check"></i>
-                            Thống kê nhân viên
-                        </a>
-                    </li>
-                    <li class="nav-item mb-2">
                         <a class="nav-link active" href="#">
                             <i class="bi bi-calendar-plus"></i>
-                            Thống kê thuốc thú Y
+                            Sử lý yêu cầu đặt lịch
                         </a>
                     </li>
                     <li class="nav-item mb-2">
                         <a class="nav-link" href="#">
                             <i class="bi bi-calendar-check"></i>
-                            Thống kê khách hàng
+                            Tạo lịch khám bệnh
                         </a>
                     </li>
                     <li class="nav-item mb-2">
                         <a class="nav-link" href="#">
                             <i class="bi bi-calendar-check"></i>
-                            Thống kê thú cưng
+                            Quản lý thuốc thú y
                         </a>
                     </li>
                 </ul>
@@ -146,7 +140,7 @@
         </div>
         <div class="col-md-10">
             <div class="header d-flex justify-content-end">
-                <span class="fs-4">Nguyen The
+                <span class="fs-4">{{Session::get("name")}}
                 <img class="w-30 h-30" style="width: 50px" src="../../img/logo.jpg" alt=""></span>
             </div>
             <div class="p-4">

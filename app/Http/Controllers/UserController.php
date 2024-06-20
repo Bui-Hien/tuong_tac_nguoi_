@@ -13,33 +13,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\PhpWord;
+use function Symfony\Component\String\s;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
 
-    public function doctor()
-    {
-        return view('doctors.home');
-
-    }
-
-    public function manager()
-    {
-        return view('managers.home');
-    }
-
-    public function createEmployee()
-    {
-        return view('managers.create-employee');
-    }
-
-
-    public function PostCreateEmployee
-    (Request $request)
+    public function PostCreateEmployee(Request $request)
     {
         $request->validate([
             'email' => 'required|email|unique:users',
@@ -94,10 +75,15 @@ class UserController extends Controller
         return back()->with('success', 'Người dùng đã được xóa thành công.');
     }
 
-    public
-    function ListEmployee()
+    public function ListEmployee()
     {
-        $data = User::with('userRules.rule')->get();
+        $data = User::with('userRules.rule')
+            ->whereHas('userRules.rule', function ($query) {
+                $query->where('id', 1)
+                    ->orWhere('id', 2)
+                    ->orWhere('id', 3);
+            })->get();
+
         $data->transform(function ($user) {
             // Format the created_at attribute
             $user->formatted_created_at = date('d/m/Y', strtotime($user->created_at));
@@ -105,7 +91,7 @@ class UserController extends Controller
             return $user;
         });
         // Pass the data to the view
-        return view('managers.accounts', compact('data'));
+        return $data;
     }
 
 
@@ -162,7 +148,6 @@ class UserController extends Controller
             }
         }
         UserRule::where('user_id', $user->id)->whereNotIn('rule_id', array_values($roles))->delete();
-        print_r($request->all());
         $user->save();
 
         return redirect('managers/accounts')->with('success', 'Employee updated ' . $user->name . ' successfully.');
@@ -471,7 +456,6 @@ class UserController extends Controller
                     ->where('schedules.date', '>=', $startDate);
             });
         }
-
         // Get the results
         $results = $query->paginate(5);
 
@@ -662,40 +646,167 @@ class UserController extends Controller
 
     public function exportMedicineWord(Request $request, Medicine $results)
     {
-        print_r($results
-        );
+        $results = json_decode($request->input('results'), true);
 
-//        $phpWord = new PhpWord();
-//        $section = $phpWord->addSection();
-//
-//        $table = $section->addTable();
-//        $table->addRow();
-//        $table->addCell()->addText('Mã');
-//        $table->addCell()->addText('Tên');
-//        $table->addCell()->addText('SL');
-//        $table->addCell()->addText('T.Thái');
-//        $table->addCell()->addText('Giá');
-//        $table->addCell()->addText('Ngày sản xuất');
-//        $table->addCell()->addText('Hạn sử dụng');
-//        $table->addCell()->addText('Ngày nhập');
-//
-//        foreach ($results as $result) {
-//            $table->addRow();
-//            $table->addCell()->addText($result['id']);
-//            $table->addCell()->addText($result['name']);
-//            $table->addCell()->addText($result['quantity']);
-//            $table->addCell()->addText($result['status'] == 0 ? 'Còn' : 'Hết');
-//            $table->addCell()->addText($result['cost']);
-//            $table->addCell()->addText($result['manufacture_date']);
-//            $table->addCell()->addText($result['expiry_date']);
-//            $table->addCell()->addText(date('d/m/Y', strtotime($result['created_at'])));
-//        }
-//
-//        $fileName = 'medicine.docx';
-//        $tempFile = tempnam(sys_get_temp_dir(), $fileName);
-//        $phpWord->save($tempFile, 'Word2007');
-//
-//        return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
+        $phpWord = new PhpWord();
+        $section = $phpWord->addSection();
+
+        $table = $section->addTable();
+        $table->addRow();
+        $table->addCell()->addText('Mã');
+        $table->addCell()->addText('Tên');
+        $table->addCell()->addText('SL');
+        $table->addCell()->addText('T.Thái');
+        $table->addCell()->addText('Giá');
+        $table->addCell()->addText('Ngày sản xuất');
+        $table->addCell()->addText('Hạn sử dụng');
+        $table->addCell()->addText('Ngày nhập');
+
+        foreach ($results['data'] as $result) {
+            $table->addRow();
+            $table->addCell()->addText($result['id']);
+            $table->addCell()->addText($result['name']);
+            $table->addCell()->addText($result['quantity']);
+            $table->addCell()->addText($result['status'] == 0 ? 'Còn' : 'Hết');
+            $table->addCell()->addText($result['cost']);
+            $table->addCell()->addText($result['manufacture_date']);
+            $table->addCell()->addText($result['expiry_date']);
+            $table->addCell()->addText(date('d/m/Y', strtotime($result['created_at'])));
+        }
+
+        $fileName = 'medicine.docx';
+        $tempFile = tempnam(sys_get_temp_dir(), $fileName);
+        $phpWord->save($tempFile, 'Word2007');
+
+        return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
     }
 
+    public function employee(Request $request)
+    {
+
+        $id = $request->input('id');
+
+
+        $results = User::with('userRules.rule')
+            ->whereHas('userRules.rule', function ($query) {
+                $query->where('id', 1)
+                    ->orWhere('id', 2)
+                    ->orWhere('id', 3);
+            })->get();
+
+        $results->transform(function ($user) {
+            // Format the created_at attribute
+            $user->formatted_created_at = date('d/m/Y', strtotime($user->created_at));
+
+            return $user;
+        });
+        if ($id) {
+            $user = User::with('userRules.rule')
+                ->whereHas('userRules.rule', function ($query) {
+                    $query->where('id', 1)
+                        ->orWhere('id', 2)
+                        ->orWhere('id', 3);
+                })->where('id', $id)->get();
+
+            $results->transform(function ($user) {
+                // Format the created_at attribute
+                $user->formatted_created_at = date('d/m/Y', strtotime($user->created_at));
+
+                return $user;
+            });
+            return view('managers.employee_stats', compact('results', 'user'));
+
+        } else {
+            return view('managers.employee_stats', compact('results'));
+        }
+    }
+
+    public function exportEmployee(Request $request)
+    {
+        // Retrieve query parameters from the request
+        $customerId = $request->input('customer_id');
+        $serviceName = $request->input('service_name');
+        $serviceId = $request->input('service_id');
+        $serviceCost = $request->input('service_cost');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        // Build the query
+        $query = DB::table('schedules')
+            ->join('users', 'users.id', '=', 'schedules.customer_id')
+            ->join('services', 'services.id', '=', 'schedules.service_id')
+            ->select('users.id as customer_id', 'services.id as service_id', 'services.name', 'services.cost', 'schedules.date');
+
+        // Apply conditions if provided
+        if ($customerId) {
+            $query->where('users.id', $customerId);
+        }
+
+        if ($serviceName) {
+            $query->where('services.name', $serviceName);
+        }
+        if ($serviceId) {
+            $query->where('services.name', $serviceId);
+        }
+
+        if ($serviceCost) {
+            $query->where('services.cost', $serviceCost);
+        }
+
+        if ($startDate && $endDate) {
+            $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->format('Y-m-d');
+            $endDate = Carbon::createFromFormat('Y-m-d', $endDate)->format('Y-m-d');
+            $query->where(function ($dateQuery) use ($startDate, $endDate) {
+                $dateQuery->where('schedules.date', '<=', $endDate)
+                    ->where('schedules.date', '>=', $startDate);
+            });
+        }
+
+        // Get the results
+        $results = $query->get();
+
+        return view('managers.export_customer', compact('results'));
+    }
+
+    public function exportEmployeeWord(Request $request)
+    {
+        $results = json_decode($request->input('results'), true);
+
+        $phpWord = new PhpWord();
+        $section = $phpWord->addSection();
+
+        // Add title
+        $section->addText(
+            'Mẫu thống kê khách hàng',
+            ['name' => 'Arial', 'size' => 16, 'bold' => true, 'alignment' => 'center']
+        );
+
+        // Add table
+        $table = $section->addTable(['borderSize' => 6, 'borderColor' => '999999', 'cellMargin' => 80]);
+
+        // Add header row
+        $table->addRow();
+        $table->addCell(2000)->addText('Mã KH', ['bold' => true]);
+        $table->addCell(2000)->addText('Mã dịch vụ', ['bold' => true]);
+        $table->addCell(4000)->addText('Tên dịch vụ', ['bold' => true]);
+        $table->addCell(2000)->addText('Giá dịch vụ', ['bold' => true]);
+        $table->addCell(2000)->addText('Ngày khám', ['bold' => true]);
+
+        // Add data rows
+        foreach ($results as $result) {
+            $table->addRow();
+            $table->addCell(2000)->addText('KH' . $result['customer_id']);
+            $table->addCell(2000)->addText('DV' . $result['service_id']);
+            $table->addCell(4000)->addText($result['name']);
+            $table->addCell(2000)->addText($result['cost'] . ' VND');
+            $table->addCell(2000)->addText($result['date']);
+        }
+
+        // Save file
+        $fileName = 'customer_statistics.docx';
+        $tempFile = tempnam(sys_get_temp_dir(), $fileName);
+        $phpWord->save($tempFile, 'Word2007');
+
+        return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
+    }
 }
