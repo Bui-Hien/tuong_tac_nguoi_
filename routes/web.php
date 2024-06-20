@@ -74,7 +74,7 @@ Route::middleware(['authEmployee'])->group(function () {
     Route::put('employees/customers/{id}/cancel-build', [\App\Http\Controllers\ScheduleController::class, 'CancelBuild'])->name('cancel-update-build');
     Route::resource('employees/medicines', MedicineController::class);
 
-
+    Route::get('employees/export_imediccine', [UserController::class, 'export_imediccine'])->name('employees.export_imediccine');
 });
 Route::middleware(['authDoctor'])->group(function () {
     Route::resource('health_records', \App\Http\Controllers\HealthRecordController::class);

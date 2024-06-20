@@ -13,12 +13,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
-use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\PhpWord;
-use function Symfony\Component\String\s;
 
 class UserController extends Controller
 {
+    public function export_imediccine()
+    {
+        return view('managers.export_imediccine');
+    }
 
     public function PostCreateEmployee(Request $request)
     {
@@ -322,7 +324,7 @@ class UserController extends Controller
         }
 
         // Get the results
-        $results = $query->paginate(10);;
+        $results = $query->paginate(5);;
 
         $services = Service::all();
 
