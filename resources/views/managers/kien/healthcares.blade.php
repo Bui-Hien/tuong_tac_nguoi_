@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý sổ khám bệnh</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <style>
         .sidebar {
-            background-color: #add8e6;
+            background-color: #9adafe;
             padding: 15px;
             height: 100vh;
             width: 200px;
@@ -17,6 +18,7 @@
         }
         .sidebar h6, .sidebar p {
             text-align: center;
+            font-size: 22px;
         }
         .sidebar .divider {
             border-top: 1px solid black;
@@ -25,24 +27,25 @@
         .sidebar .btn {
             width: 100%;
             height: 60px;
-            /* background-color: #6c757d; */
             color: black;
             border: none;
             margin-top: 20px;
         }
+        .sidebar .btn:hover {
+            background-color: #DDDDDD;
+        }
         .topbar {
             background-color: #f8f9fa;
-            padding: 10px;
+            padding:  22px 12px 12px;
             display: flex;
             justify-content: flex-end;
             align-items: center;
             border-bottom: 1px solid #dee2e6;
-            margin-left: 0px;
             position: fixed;
             top: 0;
             right: 0;
             left: 200px;
-            height: 60px;
+            height: 65px;
             z-index: 1000;
         }
         .main-content {
@@ -80,7 +83,8 @@
         .btn-group {
             display: flex;
             justify-content: space-between;
-        }   
+
+        }
         .btn-group button {
             width: 100px;
             height: 50px;
@@ -90,6 +94,18 @@
             margin: 30px 100px 0 100px ;
             padding: 2.5px 5px;
         }
+        .btn-group button:hover {
+            transition: background-color 0.3s;
+        }
+        .btn-group .tao-so-btn:hover {
+            background-color: #9adafe;
+        }
+        .btn-group .xoa-btn:hover {
+            background-color: red;
+        }
+        .btn-group .cap-nhat-btn:hover {
+            background-color: lightblue;
+        }
         .section-divider {
             border-top: 1px solid black;
             margin: 40px 0;
@@ -98,7 +114,7 @@
             text-align: center;
         }
         .table .btn {
-            background-color: #17a2b8;
+            background-color: #9adafe;
             color: white;
         }
         .modal {
@@ -150,91 +166,90 @@
         }
         .modal-content .form-group input {
             width: 60%;
-        }     
-
+        }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <div class="text-center mb-4">
-            <h6>Bác sĩ</h6>
-        </div>
-        <div class="divider"></div>
-        <button class="btn">Xem lịch khám</button>
-        <button class="btn" style= "background-color: #DDDDDD": #6c757d >Quản lý sổ khám bệnh</button>
+<div class="sidebar">
+    <div class="text-center mb-4">
+        <h6><i class="fas fa-user-md"></i> Bác sĩ</h6>
     </div>
-    <div class="topbar">
-        <div class="user-info">
-            <img src="https://via.placeholder.com/30" class="rounded-circle" alt="User">
-            <span>Quốc Huy</span>
-        </div>
+    <div class="divider"></div>
+    <button class="btn"><i class="fas fa-calendar-alt p-2"></i> Xem lịch khám</button>
+    <button class="btn"><i class="fas fa-book-medical p-1"></i> Quản lý sổ khám bệnh</button>
+</div>
+<div class="topbar">
+    <div class="user-info">
+        <img src="https://via.placeholder.com/30" class="rounded-circle" alt="User">
+        <span>Quốc Huy</span>
     </div>
-    <div class="main-content">
-        <div class="form-section">
-            <div class="form-left">
-                <div class="form-group">
-                    <label for="doctorId">Mã bác sĩ:</label>
-                    <input type="text" class="form-control" id="doctorId">
-                </div>
-                <div class="form-group">
-                    <label for="petId">Mã thú cưng:</label>
-                    <input type="text" class="form-control" id="petId">
-                </div>
-                <div class="form-group">
-                    <label for="phone">Số điện thoại:</label>
-                    <input type="text" class="form-control" id="phone">
-                </div>
+</div>
+<div class="main-content">
+    <div class="form-section mt-3">
+        <div class="form-left">
+            <div class="form-group">
+                <label for="doctorId">Mã bác sĩ:</label>
+                <input type="text" class="form-control" id="doctorId">
             </div>
-            <div class="form-right">
-                <div class="form-group">
-                    <label for="prescriptionId">Mã đơn thuốc:</label>
-                    <input type="text" class="form-control" id="prescriptionId">
-                </div>
-                <div class="form-group">
-                    <label for="issueDate">Ngày cấp:</label>
-                    <input type="date" class="form-control" id="issueDate">
-                </div>
+            <div class="form-group">
+                <label for="petId">Mã thú cưng:</label>
+                <input type="text" class="form-control" id="petId">
+            </div>
+            <div class="form-group">
+                <label for="phone">Số điện thoại:</label>
+                <input type="text" class="form-control" id="phone">
             </div>
         </div>
-        <div class="btn-group">
-            <button type="button" class="btn" onclick="showConfirmation('Tạo sổ')">Tạo sổ</button>
-            <button type="button" class="btn" onclick="showConfirmation('Xóa')">Xóa</button>
-            <button type="button" class="btn" onclick="showConfirmation('Cập nhật')">Cập nhật</button>
-            <button type="button" class="btn">Tìm kiếm</button>
+        <div class="form-right">
+            <div class="form-group">
+                <label for="prescriptionId">Mã đơn thuốc:</label>
+                <input type="text" class="form-control" id="prescriptionId">
+            </div>
+            <div class="form-group">
+                <label for="issueDate">Ngày cấp:</label>
+                <input type="date" class="form-control" id="issueDate">
+            </div>
         </div>
-        <div class="section-divider"></div>
-        <table class="table table-bordered mt-4">
-            <thead>
-                <tr>
-                    <th>Mã sổ</th>
-                    <th>Mã Bác sĩ</th>
-                    <th>Mã thú cưng</th>
-                    <th>Mã đơn thuốc</th>
-                    <th>Số điện thoại</th>
-                    <th>Thời gian</th>
-                    <th>Hành động</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>SK02</td>
-                    <td>BS02</td>
-                    <td>TC02</td>
-                    <td>DT02</td>
-                    <td>0124xxxx</td>
-                    <td>12/06/2023, 13:19 Chiều</td>
-                    <td><button class="btn">Xem thông tin</button></td>
-                </tr>
-                <tr>
-                    <td>SK03</td>
-                    <td>BS03</td>
-                    <td>TC03</td>
-                    <td>DT03</td>
-                    <td>0125xxxx</td>
-                    <td>31/05/2023, 19:19 Tối</td>
-                    <td><button class="btn">Xem thông tin</button></td>
-                </tr>
-            </tbody>
+    </div>
+    <div class="btn-group">
+        <button type="button" class="btn tao-so-btn " onclick="showConfirmation('Tạo sổ')">Tạo sổ</button>
+        <button type="button" class="btn xoa-btn" onclick="showConfirmation('Xóa')"> Xóa</button>
+        <button type="button" class="btn cap-nhat-btn" onclick="showConfirmation('Cập nhật')"> Cập nhật</button>
+        <button type="button" class="btn"></i> Tìm kiếm</button>
+    </div>
+    <div class="section-divider"></div>
+    <table class="table table-bordered mt-4">
+        <thead>
+        <tr>
+            <th>Mã sổ</th>
+            <th>Mã Bác sĩ</th>
+            <th>Mã thú cưng</th>
+            <th>Mã đơn thuốc</th>
+            <th>Số điện thoại</th>
+            <th>Thời gian</th>
+            <th>Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>SK02</td>
+            <td>BS02</td>
+            <td>TC02</td>
+            <td>DT02</td>
+            <td>0124xxxx</td>
+            <td>12/06/2023, 13:19 Chiều</td>
+            <td><button class="btn"></i> Xem thông tin</button></td>
+        </tr>
+        <tr>
+            <td>SK03</td>
+            <td>BS03</td>
+            <td>TC03</td>
+            <td>DT03</td>
+            <td>0125xxxx</td>
+            <td>31/05/2023, 19:19 Tối</td>
+            <td><button class="btn"> Xem thông tin</button></td>
+        </tr>
+        </tbody>
         </table>
     </div>
 

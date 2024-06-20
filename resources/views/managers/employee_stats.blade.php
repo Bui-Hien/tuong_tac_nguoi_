@@ -22,7 +22,7 @@
             font-weight: bold;
             font-size: 20px;
             margin-bottom: 20px;
-            text-transform: uppercase;
+            text-transform: uppercase;z
         }
         .sidebar .bi {
             font-size: 25px;
