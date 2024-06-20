@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý tài khoản</title>
+    <title>Quản lý sổ khám bệnh</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <style>
@@ -36,7 +36,7 @@
         }
         .topbar {
             background-color: #f8f9fa;
-            padding: 22px 12px 12px;
+            padding:  22px 12px 12px;
             display: flex;
             justify-content: flex-end;
             align-items: center;
@@ -72,28 +72,40 @@
         .form-right .form-group input, .form-right .form-group select {
             width: 70%;
         }
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .user-info img {
+            margin-right: 10px;
+        }
         .btn-group {
             display: flex;
             justify-content: space-between;
+
         }
         .btn-group button {
             width: 100px;
             height: 50px;
-            background-color: #D9D9D9;
-            color: black;
+            background-color: #6c757d;
+            color: white;
             border: none;
             margin: 30px 100px 0 100px ;
             padding: 2.5px 5px;
         }
         .btn-group button:hover {
             transition: background-color 0.3s;
-            background-color: #9ADAFE;
-            color: black;
         }
-        .btn-group .xoa-btn:hover{
+        .btn-group .tao-so-btn:hover {
+            background-color: #9adafe;
+        }
+        .btn-group .xoa-btn:hover {
             background-color: red;
         }
-
+        .btn-group .cap-nhat-btn:hover {
+            background-color: lightblue;
+        }
         .section-divider {
             border-top: 1px solid black;
             margin: 40px 0;
@@ -101,8 +113,10 @@
         .table th, .table td {
             text-align: center;
         }
-
-        /* Modal styles */
+        .table .btn {
+            background-color: #9adafe;
+            color: white;
+        }
         .modal {
             display: none;
             position: fixed;
@@ -111,69 +125,47 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
         }
         .modal-content {
-            background-color: white;
+            background-color: #fefefe;
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 30%;
-            border-radius: 5px;
+            width: 80%;
+            max-width: 500px;
         }
-        .modal-content h5 {
+        .modal-content.center-text {
             text-align: center;
-            margin-bottom: 20px;
-        }
-        .modal-content p {
-            text-align: left;
         }
         .modal-footer {
             display: flex;
             justify-content: flex-end;
-            padding-top: 20px;
+            margin-top: 20px;
         }
-        .modal-footer .btn {
-            width: 100px;
+        .modal-footer button {
             margin-left: 10px;
         }
-        .modal-footer .btn-secondary {
-            background-color: #D9D9D9;
-            border: 1px solid #dee2e6;
-            color: black;
-        }
-        .modal-footer .btn-primary {
-            background-color: #D9D9D9;
-            border: none;
-            color: black;
-        }
-        .modal-footer .btn:hover {
-            background-color: #007bff;
-            color: black;
-        }
-
-        /* Success modal styles */
-        .success-modal-content {
-            background-color: white;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 30%;
-            border-radius: 5px;
-            text-align: center;
-        }
-        .success-modal-content h5 {
+        .modal-content .form-section {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 20px;
         }
-        .success-modal-content button {
-            background-color: #D9D9D9;
-            border: none;
-            color: black;
-            padding: 10px 20px;
-            border-radius: 5px;
+        .modal-content .form-left, .modal-content .form-right {
+            width: 48%;
         }
-        .success-modal-content button:hover {
-            background-color: #D9D9D9;
+        .modal-content .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .modal-content .form-group label {
+            width: 40%;
+        }
+        .modal-content .form-group input {
+            width: 60%;
         }
     </style>
 </head>
@@ -238,55 +230,56 @@
         </div>
     </div>
     <div class="btn-group">
-        <button type="button" class="btn tao-so-btn" onclick="showConfirmation('Thêm')">Thêm</button>
+        <button type="button" class="btn tao-so-btn " onclick="showConfirmation('Tạo sổ')">Tạo sổ</button>
         <button type="button" class="btn xoa-btn" onclick="showConfirmation('Xóa')"> Xóa</button>
-        <button type="button" class="btn cap-nhat-btn" onclick="showConfirmation('Sửa')"> Sửa</button>
-        <button type="button" class="btn">Tìm kiếm</button>
+        <button type="button" class="btn cap-nhat-btn" onclick="showConfirmation('Cập nhật')"> Cập nhật</button>
+        <button type="button" class="btn"></i> Tìm kiếm</button>
     </div>
-    <div class="section-divider"></div>
-    <table class="table table-bordered mt-4">
-        <thead>
-        <tr>
-            <th>Mã</th>
-            <th>Tên nhân viên</th>
-            <th>Giới tính</th>
-            <th>Chức vụ</th>
-            <th>Ngày cấp</th>
-            <th>SDT</th>
-            <th>Email</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>QL01</td>
-            <td>Vương Kiên</td>
-            <td>Nam</td>
-            <td>Quản lý</td>
-            <td>25/5/2024</td>
-            <td>09xxxxxxxx</td>
-            <td>aaa@gmail.com</td>
-        </tr>
-        <tr>
-            <td>BS01</td>
-            <td>Đấu Thế</td>
-            <td>Nam</td>
-            <td>Bác sĩ</td>
-            <td>26/5/2024</td>
-            <td>09xxxxxxxx</td>
-            <td>bbb@gmail.com</td>
-        </tr>
-        <tr>
-            <td>NV01</td>
-            <td>Xuân Hiền</td>
-            <td>Nam</td>
-            <td>Nhân viên</td>
-            <td>26/5/2024</td>
-            <td>09xxxxxxxx</td>
-            <td>ccc@gmail.com</td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+        </form>
+        <div class="section-divider"></div>
+        <table class="table table-bordered mt-4">
+            <thead>
+                <tr>
+                    <th>Mã</th>
+                    <th>Tên nhân viên</th>
+                    <th>Giới tính</th>
+                    <th>Chức vụ</th>
+                    <th>Ngày cấp</th>
+                    <th>SDT</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>QL01</td>
+                    <td>Vương Kiên</td>
+                    <td>Nam</td>
+                    <td>Quản lý</td>
+                    <td>25/5/2024</td>
+                    <td>09xxxxxxxx</td>
+                    <td>aaa@gmail.com</td>
+                </tr>
+                <tr>
+                    <td>BS01</td>
+                    <td>Đấu Thế</td>
+                    <td>Nam</td>
+                    <td>Bác sĩ</td>
+                    <td>26/5/2024</td>
+                    <td>09xxxxxxxx</td>
+                    <td>bbb@gmail.com</td>
+                </tr>
+                <tr>
+                    <td>NV01</td>
+                    <td>Xuân Hiền</td>
+                    <td>Nam</td>
+                    <td>Nhân viên</td>
+                    <td>26/5/2024</td>
+                    <td>09xxxxxxxx</td>
+                    <td>ccc@gmail.com</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
 <!-- Confirmation Modal -->
 <div id="confirmationModal" class="modal">

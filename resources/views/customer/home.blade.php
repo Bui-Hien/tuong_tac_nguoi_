@@ -54,19 +54,21 @@
             <a class="nav-link disabled ms-2" aria-disabled="true"><i class="bi bi-geo-alt me-2"></i> 175 Tây Sơn - Đống Đa - Hà Nội</a>
         </div>
     </div>
-    <ul class=" header-middle  nav nav-pills nav-fill d-flex justify-content-between ">
+    <ul class=" header-middle  nav nav-pills nav-fill d-flex justify-content-between py-2 ">
         <li class="nav-item">
             <img class="w-30" src="./../../img/img.png" alt="Active">
         </li>
         <li class="nav-item mt-2">
-            <h2 class="mb-0 fw-bolder">PetHaven vì sức khoẻ thú cưng của bạn</h2>
+            <h3 class="mb-0 fw-bolder">PetHaven vì sức khoẻ thú cưng của bạn</h3>
         </li>
+        <li class="nav-item  ">
+            <button class="btn w-30 btn-lg   " style ="background-color:#90FF5B; " > <h3 class =" text-center mb-0">Đặt Lịch</h3></button>
         <li class="nav-item mt-2">
             <a href="{{route('booking')}}" class="btn w-30  " style ="background-color:#90FF5B; " >Đặt Lịch</a>
         </li>
     </ul>
 </header>
-<div class="container-fluid mt-4">
+<div class="container-fluid mt-4 ">
     <div class="row">
         <nav class="col-md-3">
             <ul class="nav flex-column">
