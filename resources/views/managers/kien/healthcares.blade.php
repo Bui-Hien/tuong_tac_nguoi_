@@ -83,28 +83,27 @@
         .btn-group {
             display: flex;
             justify-content: space-between;
-
         }
         .btn-group button {
             width: 100px;
             height: 50px;
-            background-color: #6c757d;
-            color: white;
+            background-color: #D9D9D9;
+            color: black;
             border: none;
-            margin: 30px 100px 0 100px ;
+            margin: 30px 100px 0 100px;
             padding: 2.5px 5px;
         }
         .btn-group button:hover {
             transition: background-color 0.3s;
         }
         .btn-group .tao-so-btn:hover {
-            background-color: #9adafe;
+            background-color: #33CCFF;
         }
         .btn-group .xoa-btn:hover {
             background-color: red;
         }
         .btn-group .cap-nhat-btn:hover {
-            background-color: lightblue;
+            background-color: #7DD3F7;
         }
         .section-divider {
             border-top: 1px solid black;
@@ -114,7 +113,7 @@
             text-align: center;
         }
         .table .btn {
-            background-color: #9adafe;
+            background-color: #33CCFF;
             color: white;
         }
         .modal {
@@ -145,8 +144,20 @@
             justify-content: flex-end;
             margin-top: 20px;
         }
+        .modal-footer.center {
+            justify-content: center;
+        }
         .modal-footer button {
             margin-left: 10px;
+        }
+        .modal-footer .confirm-btn {
+            color: white;
+        }
+        .modal-footer .confirm-btn.red {
+            background-color: red;
+        }
+        .modal-footer .confirm-btn.blue {
+            background-color: #33CCFF;
         }
         .modal-content .form-section {
             display: flex;
@@ -212,10 +223,10 @@
         </div>
     </div>
     <div class="btn-group">
-        <button type="button" class="btn tao-so-btn " onclick="showConfirmation('Tạo sổ')">Tạo sổ</button>
+        <button type="button" class="btn tao-so-btn" onclick="showConfirmation('Thêm')">Tạo sổ</button>
         <button type="button" class="btn xoa-btn" onclick="showConfirmation('Xóa')"> Xóa</button>
         <button type="button" class="btn cap-nhat-btn" onclick="showConfirmation('Cập nhật')"> Cập nhật</button>
-        <button type="button" class="btn"></i> Tìm kiếm</button>
+        <button type="button" class="btn">Tìm kiếm</button>
     </div>
     <div class="section-divider"></div>
     <table class="table table-bordered mt-4">
@@ -238,7 +249,7 @@
             <td>DT02</td>
             <td>0124xxxx</td>
             <td>12/06/2023, 13:19 Chiều</td>
-            <td><button class="btn"></i> Xem thông tin</button></td>
+            <td><button class="btn">Xem thông tin</button></td>
         </tr>
         <tr>
             <td>SK03</td>
@@ -246,94 +257,119 @@
             <td>TC03</td>
             <td>DT03</td>
             <td>0125xxxx</td>
-            <td>31/05/2023, 19:19 Tối</td>
-            <td><button class="btn"> Xem thông tin</button></td>
+            <td>20/06/2023, 08:19 Sáng</td>
+            <td><button class="btn">Xem thông tin</button></td>
+        </tr>
+        <tr>
+            <td>SK04</td>
+            <td>BS04</td>
+            <td>TC04</td>
+            <td>DT04</td>
+            <td>0126xxxx</td>
+            <td>29/06/2023, 10:19 Sáng</td>
+            <td><button class="btn">Xem thông tin</button></td>
+        </tr>
+        <tr>
+            <td>SK01</td>
+            <td>BS01</td>
+            <td>TC01</td>
+            <td>DT01</td>
+            <td>0123xxxx</td>
+            <td>22/05/2023, 07:19 Sáng</td>
+            <td><button class="btn">Xem thông tin</button></td>
         </tr>
         </tbody>
-        </table>
-    </div>
+    </table>
+</div>
 
-    <div id="confirmationModal" class="modal">
-        <div class="modal-content">
-            <h5>Xác nhận sửa thông tin</h5>
-            <p>Bạn có muốn <span id="actionType"></span> thông tin tài khoản không?</p>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeModal()">Hủy</button>
-                <button type="button" class="btn btn-primary" onclick="confirmAction()">Xác nhận</button>
-            </div>
+<div id="confirmationModal" class="modal">
+    <div class="modal-content">
+        <h5>Xác nhận sửa thông tin</h5>
+        <p>Bạn có muốn <span id="actionType"></span> thông tin tài khoản không?</p>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('confirmationModal')">Hủy</button>
+            <button type="button" class="btn confirm-btn" id="confirmBtn" onclick="confirmAction()">Xác nhận</button>
         </div>
     </div>
+</div>
 
-    <div id="successModal" class="modal">
-        <div class="modal-content center-text">
-            <h5>Thông báo</h5>
-            <p id="successMessage">Cập nhật tài khoản thành công!</p>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeModal()">Xong</button>
-            </div>
+<div id="successModal" class="modal">
+    <div class="modal-content center-text">
+        <h5>Thông báo</h5>
+        <p id="successMessage">Cập nhật tài khoản thành công!</p>
+        <div class="modal-footer center">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('successModal')">Xong</button>
         </div>
     </div>
+</div>
 
-    <script>
-        function showConfirmation(action) {
-            document.getElementById('actionType').innerText = action.toLowerCase();
-            document.getElementById('confirmationModal').style.display = 'block';
+<script>
+    function showConfirmation(action) {
+        document.getElementById('actionType').innerText = action.toLowerCase();
+        const confirmBtn = document.getElementById('confirmBtn');
+        if (action === 'Xóa') {
+            confirmBtn.classList.remove('blue');
+            confirmBtn.classList.add('red');
+        } else {
+            confirmBtn.classList.remove('red');
+            confirmBtn.classList.add('blue');
         }
+        document.getElementById('confirmationModal').style.display = 'block';
+    }
 
-        function confirmAction() {
-            document.getElementById('confirmationModal').style.display = 'none';
-            document.getElementById('successMessage').innerText = document.getElementById('actionType').innerText.charAt(0).toUpperCase() + document.getElementById('actionType').innerText.slice(1) + ' thành công!';
-            document.getElementById('successModal').style.display = 'block';
-        }
+    function confirmAction() {
+        document.getElementById('confirmationModal').style.display = 'none';
+        document.getElementById('successMessage').innerText = document.getElementById('actionType').innerText.charAt(0).toUpperCase() + document.getElementById('actionType').innerText.slice(1) + ' thành công!';
+        document.getElementById('successModal').style.display = 'block';
+    }
 
-        function closeModal() {
-            document.getElementById('confirmationModal').style.display = 'none';
-            document.getElementById('successModal').style.display = 'none';
-        }
-    </script>
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+</script>
 
 <!-- Form Xem thong tin -->
-    <div id="infoModal" class="modal">
-        <div class="modal-content">
-            <h5>Thông tin sổ khám bệnh</h5>
-            <div class="form-section">
-                <div class="form-left">
-                    <div class="form-group" style="width: 45%;">
-                        <label>Mã số:</label>
-                        <input type="text" class="form-control" id="infoMaSo" readonly>
-                    </div>
-                    <div class="form-group" style="width: 45%;">
-                        <label>Tên khách hàng:</label>
-                        <input type="text" class="form-control" id="infoTenKhachHang" readonly>
-                    </div>
-                    <div class="form-group" style="width: 45%;">
-                        <label>Ngày cấp sổ:</label>
-                        <input type="text" class="form-control" id="infoNgayCapSo" readonly>
-                    </div>
+<div id="infoModal" class="modal">
+    <div class="modal-content">
+        <h5>Thông tin sổ khám bệnh</h5>
+        <div class="form-section">
+            <div class="form-left">
+                <div class="form-group" style="width: 45%;">
+                    <label>Mã số:</label>
+                    <input type="text" class="form-control" id="infoMaSo" readonly>
                 </div>
-                <div class="form-right">
-                    <div class="form-group" style="width: 45%;">
-                        <label>Số điện thoại:</label>
-                        <input type="text" class="form-control" id="infoSoDienThoai" readonly>
-                    </div>
-                    <div class="form-group" style="width: 45%;">
-                        <label>Loại thú cưng:</label>
-                        <input type="text" class="form-control" id="infoLoaiThuCung" readonly>
-                    </div>
-                    <div class="form-group" style="width: 45%;">
-                        <label>Giống thú cưng:</label>
-                        <input type="text" class="form-control" id="infoGiongThuCung" readonly>
-                    </div>
+                <div class="form-group" style="width: 45%;">
+                    <label>Tên khách hàng:</label>
+                    <input type="text" class="form-control" id="infoTenKhachHang" readonly>
+                </div>
+                <div class="form-group" style="width: 45%;">
+                    <label>Ngày cấp sổ:</label>
+                    <input type="text" class="form-control" id="infoNgayCapSo" readonly>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeModal('infoModal')">Đóng</button>
+            <div class="form-right">
+                <div class="form-group" style="width: 45%;">
+                    <label>Số điện thoại:</label>
+                    <input type="text" class="form-control" id="infoSoDienThoai" readonly>
+                </div>
+                <div class="form-group" style="width: 45%;">
+                    <label>Loại thú cưng:</label>
+                    <input type="text" class="form-control" id="infoLoaiThuCung" readonly>
+                </div>
+                <div class="form-group" style="width: 45%;">
+                    <label>Giống thú cưng:</label>
+                    <input type="text" class="form-control" id="infoGiongThuCung" readonly>
+                </div>
             </div>
         </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('infoModal')">Đóng</button>
+        </div>
     </div>
+</div>
 
 <!-- Xem thong tin -->
-    <script>
+<script>
     document.querySelectorAll('.btn').forEach(button => {
         button.addEventListener('click', event => {
             if (event.target.innerText === 'Xem thông tin') {
@@ -354,6 +390,6 @@
     function closeModal(modalId) {
         document.getElementById(modalId).style.display = 'none';
     }
-    </script>
+</script>
 </body>
 </html>

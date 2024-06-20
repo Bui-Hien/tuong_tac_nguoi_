@@ -56,7 +56,8 @@
             text-align: center;
         }
         .table .btn {
-            background-color: #9adafe;
+            background-color: #33CCFF;
+            color: white;
         }
         #infoModal {
             display: none;
@@ -108,8 +109,8 @@
         <h6><i class="fas fa-user-md"></i>Bác sĩ</h6>
     </div>
     <div class="divider"></div>
-    <button class="btn" style="background-color: #DDDDDD">Xem lịch khám</button>
-    <button class="btn">Quản lý sổ khám bệnh</button>
+    <button class="btn"><i class="fas fa-calendar-alt p-2"></i> Xem lịch khám</button>
+    <button class="btn"><i class="fas fa-book-medical p-1"></i> Quản lý sổ khám bệnh</button>
 </div>
 <div class="topbar">
     <div class="user-info">
