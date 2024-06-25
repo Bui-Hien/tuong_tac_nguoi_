@@ -191,9 +191,19 @@
         </div>
     </div>
 </div>
+<form id="exportForm" action="{{ route('export.customer.word') }}" method="POST" style="display: none;">
+    @csrf
+    <input type="hidden" name="results" id="resultsInput" value="{{ json_encode($results) }}">
+</form>
+
+<script>
+    document.getElementById('btnXuatThongTin').addEventListener('click', function () {
+        document.getElementById('exportForm').submit();
+    });
+</script>
 <!--JS thông báo xuất thành công -->
 <script>
-    document.getElementById('btnXuatThongTin').addEventListener('click', function() {
+    document.getElementById('btnXuatThongTin').addEventListener('click', function () {
         var myModal = new bootstrap.Modal(document.getElementById('myModal'), {
             keyboard: false
         });

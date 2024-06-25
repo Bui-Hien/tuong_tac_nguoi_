@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\PhpWord;
 
 class UserController extends Controller
@@ -388,7 +389,8 @@ class UserController extends Controller
         // Add title
         $section->addText(
             'Mẫu thống kê khách hàng',
-            ['name' => 'Arial', 'size' => 16, 'bold' => true, 'alignment' => 'center']
+            ['name' => 'Arial', 'size' => 16, 'bold' => true],
+            ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]
         );
 
         // Add table
@@ -685,129 +687,126 @@ class UserController extends Controller
 
     public function employee(Request $request)
     {
-
-        $id = $request->input('id');
-
+        $employeeId = $request->input('employee_id');
+        $roleId = $request->input('role_id');
+        $employeeName = $request->input('employee_name');
+        $date = $request->input('date');
+        $phone = $request->input('phone');
+        $sex = $request->input('sex');
 
         $results = User::with('userRules.rule')
             ->whereHas('userRules.rule', function ($query) {
-                $query->where('id', 1)
-                    ->orWhere('id', 2)
-                    ->orWhere('id', 3);
-            })->get();
-
-        $results->transform(function ($user) {
-            // Format the created_at attribute
-            $user->formatted_created_at = date('d/m/Y', strtotime($user->created_at));
-
-            return $user;
-        });
-        if ($id) {
-            $user = User::with('userRules.rule')
-                ->whereHas('userRules.rule', function ($query) {
-                    $query->where('id', 1)
-                        ->orWhere('id', 2)
-                        ->orWhere('id', 3);
-                })->where('id', $id)->get();
-
-            $results->transform(function ($user) {
-                // Format the created_at attribute
-                $user->formatted_created_at = date('d/m/Y', strtotime($user->created_at));
-
-                return $user;
+                $query->whereIn('id', [1, 2, 3]);
             });
-            return view('managers.employee_stats', compact('results', 'user'));
 
-        } else {
-            return view('managers.employee_stats', compact('results'));
+        if ($employeeId) {
+            $results->where('id', $employeeId);
         }
+        if ($roleId) {
+            $results->whereHas('userRules.rule', function ($query) use ($roleId) {
+                $query->where('id', $roleId);
+            });
+        }
+        if ($employeeName) {
+            $results->where('name', 'like', '%' . $employeeName . '%');
+        }
+        if ($date) {
+            $results->whereDate('created_at', $date);
+        }
+        if ($phone) {
+            $results->where('phone', 'like', '%' . $phone . '%');
+        }
+        if ($sex) {
+            $results->where('sex', 'like', '%' . $sex . '%');
+        }
+
+        $results = $results->get();
+
+        return view('managers.employee_stats', compact('results'));
     }
+
 
     public function exportEmployee(Request $request)
     {
-        // Retrieve query parameters from the request
-        $customerId = $request->input('customer_id');
-        $serviceName = $request->input('service_name');
-        $serviceId = $request->input('service_id');
-        $serviceCost = $request->input('service_cost');
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
+        $employeeId = $request->input('employee_id');
+        $roleId = $request->input('role_id');
+        $employeeName = $request->input('employee_name');
+        $date = $request->input('date');
+        $phone = $request->input('phone');
+        $sex = $request->input('sex');
 
-        // Build the query
-        $query = DB::table('schedules')
-            ->join('users', 'users.id', '=', 'schedules.customer_id')
-            ->join('services', 'services.id', '=', 'schedules.service_id')
-            ->select('users.id as customer_id', 'services.id as service_id', 'services.name', 'services.cost', 'schedules.date');
+        $results = User::with('userRules.rule')
+            ->whereHas('userRules.rule', function ($query) {
+                $query->whereIn('id', [1, 2, 3]);
+            });
 
-        // Apply conditions if provided
-        if ($customerId) {
-            $query->where('users.id', $customerId);
+        if ($employeeId) {
+            $results->where('id', $employeeId);
         }
-
-        if ($serviceName) {
-            $query->where('services.name', $serviceName);
-        }
-        if ($serviceId) {
-            $query->where('services.name', $serviceId);
-        }
-
-        if ($serviceCost) {
-            $query->where('services.cost', $serviceCost);
-        }
-
-        if ($startDate && $endDate) {
-            $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->format('Y-m-d');
-            $endDate = Carbon::createFromFormat('Y-m-d', $endDate)->format('Y-m-d');
-            $query->where(function ($dateQuery) use ($startDate, $endDate) {
-                $dateQuery->where('schedules.date', '<=', $endDate)
-                    ->where('schedules.date', '>=', $startDate);
+        if ($roleId) {
+            $results->whereHas('userRules.rule', function ($query) use ($roleId) {
+                $query->where('id', $roleId);
             });
         }
+        if ($employeeName) {
+            $results->where('name', 'like', '%' . $employeeName . '%');
+        }
+        if ($date) {
+            $results->whereDate('created_at', $date);
+        }
+        if ($phone) {
+            $results->where('phone', 'like', '%' . $phone . '%');
+        }
+        if ($sex) {
+            $results->where('sex', 'like', '%' . $sex . '%');
+        }
 
-        // Get the results
-        $results = $query->get();
+        $results = $results->get();
 
-        return view('managers.export_customer', compact('results'));
+        return view('managers.export_infor', compact('results'));
     }
 
     public function exportEmployeeWord(Request $request)
     {
-        $results = json_decode($request->input('results'), true);
+        $results = json_decode($request->input('results'));
 
         $phpWord = new PhpWord();
         $section = $phpWord->addSection();
-
-        // Add title
         $section->addText(
-            'Mẫu thống kê khách hàng',
-            ['name' => 'Arial', 'size' => 16, 'bold' => true, 'alignment' => 'center']
+            'Mẫu thông kê thông tin',
+            ['name' => 'Arial', 'size' => 16, 'bold' => true],
+            ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]
         );
 
-        // Add table
-        $table = $section->addTable(['borderSize' => 6, 'borderColor' => '999999', 'cellMargin' => 80]);
+        $table = $section->addTable();
 
-        // Add header row
+        // Add table headers
         $table->addRow();
-        $table->addCell(2000)->addText('Mã KH', ['bold' => true]);
-        $table->addCell(2000)->addText('Mã dịch vụ', ['bold' => true]);
-        $table->addCell(4000)->addText('Tên dịch vụ', ['bold' => true]);
-        $table->addCell(2000)->addText('Giá dịch vụ', ['bold' => true]);
-        $table->addCell(2000)->addText('Ngày khám', ['bold' => true]);
+        $table->addCell()->addText('Mã');
+        $table->addCell()->addText('Tên');
+        $table->addCell()->addText('Giới tính');
+        $table->addCell()->addText('Chức vụ');
+        $table->addCell()->addText('Ngày sinh');
+        $table->addCell()->addText('SĐT');
+        $table->addCell()->addText('Email');
 
         // Add data rows
         foreach ($results as $result) {
             $table->addRow();
-            $table->addCell(2000)->addText('KH' . $result['customer_id']);
-            $table->addCell(2000)->addText('DV' . $result['service_id']);
-            $table->addCell(4000)->addText($result['name']);
-            $table->addCell(2000)->addText($result['cost'] . ' VND');
-            $table->addCell(2000)->addText($result['date']);
+            $table->addCell()->addText($result->id);
+            $table->addCell()->addText($result->name);
+            $table->addCell()->addText($result->sex == 0 ? 'Nam' : 'Nữ');
+            $table->addCell()->addText('Nhân viên');
+            $table->addCell()->addText($result->birthday);
+            $table->addCell()->addText($result->phone != null ? $result->phone : 'null');
+            $table->addCell()->addText($result->email);
         }
 
-        // Save file
-        $fileName = 'customer_statistics.docx';
+        $fileName = 'employee_stats.docx';
         $tempFile = tempnam(sys_get_temp_dir(), $fileName);
-        $phpWord->save($tempFile, 'Word2007');
+
+        $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
+        $objWriter->save($tempFile);
 
         return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
     }
