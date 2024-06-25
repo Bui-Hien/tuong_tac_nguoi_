@@ -242,7 +242,7 @@ class UserController extends Controller
             $query->where('status', '=', 0);
         })->with(['schedulesAsCustomer' => function ($query) {
             $query->where('status', '=', 0);
-        }])->get();
+        }])->paginate(10);
         $statusCounts = Schedule::select('status', \DB::raw('COUNT(*) as status_count'))
             ->groupBy('status')
             ->get();
@@ -257,7 +257,7 @@ class UserController extends Controller
             $query->where('status', '=', 1);
         })->with(['schedulesAsCustomer' => function ($query) use ($status) {
             $query->where('status', '=', 1);
-        }])->get();
+        }])->paginate(10);
         $statusCounts = Schedule::select('status', \DB::raw('COUNT(*) as status_count'))
             ->groupBy('status')
             ->get();

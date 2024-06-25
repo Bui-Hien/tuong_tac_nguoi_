@@ -189,38 +189,56 @@
                 <form class="row g-3 mb-3">
                     <div class="col-md-6">
                         <label for="maKhachHang" class="form-label">Mã khách hàng</label>
-                        <input type="text" class="form-control" id="maKhachHang">
+                        <input type="text" class="form-control" name="customer_id" id="maKhachHang"
+                               value="{{ request()->input('customer_id') }}">
+
                     </div>
                     <div class="col-md-6">
                         <label for="tenDichVu" class="form-label">Tên dịch vụ</label>
-                        <select id="tenDichVu" class="form-select">
-                            <option selected>Chọn dịch vụ...</option>
-                            <option value="1">Chăm sóc</option>
-                            <option value="2">Thăm khám</option>
+                        <select id="tenDichVu" name="service_name" class="form-select">
+                            <option {{ request()->input('service_name') ? '' : 'selected' }} value="">Chọn dịch vụ...
+                            </option>
+                            @foreach($services as $service)
+                                <option
+                                    value="{{ $service->name }}"
+                                    {{ request()->input('service_name') == $service->name ? 'selected' : '' }}>
+                                    {{ $service->name }}
+                                </option>
+                            @endforeach
                         </select>
+
                     </div>
                     <div class="col-md-6">
                         <label for="maDichvu" class="form-label">Mã dịch vụ</label>
-                        <input type="text" class="form-control" id="maDichvu">
+                        <input type="text" class="form-control" name="service_id" id="maDichvu"
+                               value="{{ request()->input('service_id') }}">
+
                     </div>
                     <div class="col-md-6">
                         <label for="giaDichVu" class="form-label">Giá dịch vụ</label>
-                        <input type="text" class="form-control" id="giaDichVu">
+                        <input type="text" class="form-control" name="service_cost" id="giaDichVu"
+                               value="{{ request()->input('service_cost') }}">
+
                     </div>
                     <div class="col-md-6 mb-4">
                         <label for="tuNgay" class="form-label">Từ ngày</label>
-                        <input type="date" class="form-control" id="tuNgay">
+                        <input type="date" class="form-control" name="start_date" id="tuNgay"
+                               value="{{ request()->input('start_date') }}">
+
                     </div>
                     <div class="col-md-6 mb-4">
                         <label for="ngayDi" class="form-label">Đến ngày</label>
-                        <input type="date" class="form-control" id="ngayDi">
+                        <input type="date" class="form-control" name="end_date" id="ngayDi"
+                               value="{{ request()->input('end_date') }}">
+
                     </div>
                     <div class="row mb-3 justify-content-center ">
                         <div class="col-auto">
-                            <button type="button" class="btn btn-secondary custom-button">Tìm kiếm</button>
+                            <button type="submit" class="btn btn-secondary custom-button">Tìm kiếm</button>
                         </div>
                         <div class="col-auto">
-                            <button type="button" class="btn btn-secondary custom-button">Xuất thông tin</button>
+                            <a href="#" onclick="exportResults()" class="btn btn-secondary custom-button">Xuất thông
+                                tin</a>
                         </div>
                     </div>
                 </form>

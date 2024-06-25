@@ -101,7 +101,7 @@
                     <!-- Thông báo thành công khi đặt lịch -->
                     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
                          tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog">
+                        <div class="modal-dialog modal-dialog-centered"> <!-- Added modal-dialog-centered class -->
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Lịch hẹn đã được đặt thành
@@ -113,7 +113,7 @@
                                     Hi vọng chúng ta có thể gặp nhau sớm tại PetHaven.
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Đóng</button> <!-- Changed to btn-success -->
                                 </div>
                             </div>
                         </div>
