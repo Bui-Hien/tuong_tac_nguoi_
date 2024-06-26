@@ -185,6 +185,11 @@
             color: white;
         }
 
+        .modal-footer .btn-secondary {
+            width: 90.26px;
+            height: 37.6px;
+        }
+
         .modal-footer .confirm-btn.red {
             background-color: red;
         }
@@ -326,17 +331,24 @@
                 <td>{{ $schedule->id }}</td>
                 <td>{{ $schedule->user_id }}</td>
                 <td>{{ $schedule->pet_id }}</td>
-
                 <td>{{ $schedule->prescriptions_id }}</td>
                 <td>{{ $schedule->phone }}</td>
                 <td>{{ \Carbon\Carbon::parse($schedule->date)->format('d/m/Y, h:i A') }}</td>
-
                 <td>
-                    <button class="btn btn-primary">Xem thông tin</button>
+                    <button class="btn btn-primary"
+                            data-id="{{ $schedule->id }}"
+                            data-phone="{{ $schedule->phone }}"
+                            data-user-name="{{ $schedule->name }}"
+                    data-pet-type="{{ $schedule->species }}"
+                    data-date="{{ \Carbon\Carbon::parse($schedule->date)->format('d/m/Y, h:i A') }}"
+                    data-pet-breed="{{ $schedule->species }}"
+                    >Xem thông tin</button>
                 </td>
             </tr>
         @endforeach
+
     </table>
+
 </div>
 
 <div id="confirmationModal" class="modal">
@@ -446,14 +458,19 @@
     document.querySelectorAll('.btn').forEach(button => {
         button.addEventListener('click', event => {
             if (event.target.innerText === 'Xem thông tin') {
-                // Here you should fetch the actual data for the specific row clicked
-                // For this example, I'll use dummy data
-                document.getElementById('infoMaSo').value = 'SK01';
-                document.getElementById('infoSoDienThoai').value = '0123xxxx';
-                document.getElementById('infoTenKhachHang').value = 'Nguyễn Thế';
-                document.getElementById('infoLoaiThuCung').value = 'Mèo';
-                document.getElementById('infoNgayCapSo').value = '22/05/2023, 07:19 Sáng';
-                document.getElementById('infoGiongThuCung').value = 'Mèo Ai Cập';
+                const scheduleId = event.target.getAttribute('data-id');
+                const phone = event.target.getAttribute('data-phone');
+                const userName = event.target.getAttribute('data-user-name');
+                const petType = event.target.getAttribute('data-pet-type');
+                const date = event.target.getAttribute('data-date');
+                const petBreed = event.target.getAttribute('data-pet-breed');
+
+                document.getElementById('infoMaSo').value = scheduleId;
+                document.getElementById('infoSoDienThoai').value = phone;
+                document.getElementById('infoTenKhachHang').value = userName;
+                document.getElementById('infoLoaiThuCung').value = petType;
+                document.getElementById('infoNgayCapSo').value = date;
+                document.getElementById('infoGiongThuCung').value = petBreed;
 
                 document.getElementById('infoModal').style.display = 'block';
             }

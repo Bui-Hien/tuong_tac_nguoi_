@@ -40,6 +40,7 @@ Route::middleware(['authManager'])->group(function () {
     Route::post('managers/create-employee', [\App\Http\Controllers\UserController::class, 'PostCreateEmployee'])->name('create-employee');
     Route::delete('managers/delete-employee/{id}', [\App\Http\Controllers\UserController::class, 'DeleteEmployee'])->name('delete-employee');
     Route::get('managers/accounts', [\App\Http\Controllers\UserController::class, 'ListEmployee']);
+    Route::get('managers/manager-employee', [\App\Http\Controllers\UserController::class, 'ManagerEmployee'])->name('managers.manager.employee');
 
     Route::get('managers/update-employee/{id}', [\App\Http\Controllers\UserController::class, 'EditEmployee']);
     Route::put('managers/update-employee/{id}', [UserController::class, 'UpdateEmployee']);
@@ -66,16 +67,7 @@ Route::middleware(['authManager'])->group(function () {
 });
 
 Route::middleware(['authEmployee'])->group(function () {
-    Route::get('employees/schedulenew', [UserController::class, 'schedulenew'])->name('employees.schedulenew');
-    Route::get('employees/schedulecf', [\App\Http\Controllers\UserController::class, 'schedulecf'])->name('employees.schedulecf');
-    Route::get('employees/schedulecancel', [\App\Http\Controllers\UserController::class, 'schedulecancel'])->name('employees.schedulecancel');
-
-
-    Route::put('employees/customers/{id}/cf-build', [\App\Http\Controllers\ScheduleController::class, 'CfCfBuild'])->name('cf-update-build');
-    Route::put('employees/customers/{id}/cancel-build', [\App\Http\Controllers\ScheduleController::class, 'CancelBuild'])->name('cancel-update-build');
-    Route::resource('employees/medicines', MedicineController::class);
-
-    Route::get('employees/export_imediccine', [UserController::class, 'export_imediccine'])->name('employees.export_imediccine');
+    Route::get('employees', [\App\Http\Controllers\UserController::class, 'employee']);
 });
 Route::middleware(['authDoctor'])->group(function () {
     Route::resource('doctors/health_records', \App\Http\Controllers\HealthRecordController::class);

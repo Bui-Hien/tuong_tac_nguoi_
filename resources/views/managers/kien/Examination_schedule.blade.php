@@ -185,6 +185,38 @@
         @endforeach
         </tbody>
     </table>
+    @if($Lists->lastPage() >1)
+        <div class="d-flex justify-content-end">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <!-- Nút Previous -->
+                    @if ($Lists->previousPageUrl())
+                        <li class="page-item"><a class="page-link" href="{{ $Lists->previousPageUrl() }}">Previous</a>
+                        </li>
+                    @else
+                        <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                    @endif
+
+                    <!-- Danh sách các trang -->
+                    @for ($i = 1; $i <= $Lists->lastPage(); $i++)
+                        <li class="page-item {{ $Lists->currentPage() == $i ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $Lists->url($i) }}">{{ $i }}</a>
+                        </li>
+                    @endfor
+
+                    <!-- Nút Next -->
+                    @if ($Lists->nextPageUrl())
+                        <li class="page-item"><a class="page-link"
+                                                 href="{{ $Lists->nextPageUrl() }}">Next</a>
+                        </li>
+                    @else
+                        <li class="page-item disabled"><span class="page-link">Next</span></li>
+                    @endif
+                </ul>
+            </nav>
+        </div>
+    @endif
+
 </div>
 
 <!-- Information Modal -->
