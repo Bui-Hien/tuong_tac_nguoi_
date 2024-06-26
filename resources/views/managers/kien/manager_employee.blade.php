@@ -30,6 +30,7 @@
             color: black;
             border: none;
             margin-top: 20px;
+            /*background-color: #DDDDDD;*/
         }
         .sidebar .btn:hover {
             background-color: #DDDDDD;

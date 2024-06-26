@@ -110,7 +110,7 @@
         }
 
         #infoModal .close-btn {
-            background: #888888;
+            background: #33ccff;
             color: white;
             padding: 5px 10px;
             cursor: pointer;
@@ -144,9 +144,11 @@
         <h6><i class="fas fa-user-md"></i>Bác sĩ</h6>
     </div>
     <div class="divider"></div>
-    <a href="{{ route('doctors.health-record') }}" class="btn active"><i class="fas fa-calendar-alt p-2"></i> Xem lịch khám</a>
+    <a href="{{ route('doctors.health-record') }}" style="background-color: #DDDDDD" class="btn "><i
+            class="fas fa-calendar-alt p-2"></i> Xem lịch khám</a>
 
-    <a href="{{ route('doctors.healthcares') }}" class="btn active"><i class="fas fa-book-medical p-1"></i> Quản lý sổ
+    <a href="{{ route('doctors.healthcares') }}" class="btn "><i
+            class="fas fa-book-medical p-1"></i> Quản lý sổ
         khám bệnh</a>
 </div>
 <div class="topbar">

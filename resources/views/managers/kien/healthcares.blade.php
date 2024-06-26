@@ -242,6 +242,10 @@
             text-align: center;
             margin-bottom: 20px;
         }
+        .yellow-background {
+            background-color: #D9D9D9;
+        }
+
 
     </style>
 </head>
@@ -251,9 +255,11 @@
         <h6><i class="fas fa-user-md"></i> Bác sĩ</h6>
     </div>
     <div class="divider"></div>
-    <a href="{{ route('doctors.health-record') }}" class="btn active"><i class="fas fa-calendar-alt p-2"></i> Xem lịch
+    <a href="{{ route('doctors.health-record') }}" class="btn "><i
+            class="fas fa-calendar-alt p-2"></i> Xem lịch
         khám</a>
-    <a href="{{ route('doctors.healthcares') }}" class="btn"><i class="fas fa-book-medical p-1"></i> Quản lý sổ khám
+    <a href="{{ route('doctors.healthcares') }}" style="background-color: #DDDDDD" class=" btn "><i
+            class="fas fa-book-medical p-1"></i> Quản lý sổ khám
         bệnh</a>
 </div>
 <div class="topbar">
@@ -293,8 +299,8 @@
             </div>
         </div>
         <div class="btn-group">
-{{--            onclick="showConfirmation('Thêm')"--}}
-            <button type="submit" class="btn tao-so-btn" >Tạo sổ</button>
+            {{--            onclick="showConfirmation('Thêm')"--}}
+            <button type="submit" class="btn tao-so-btn">Tạo sổ</button>
             <button type="button" class="btn xoa-btn" onclick="showConfirmation('Xóa')"> Xóa</button>
             <button type="button" class="btn cap-nhat-btn" onclick="showConfirmation('Cập nhật')"> Cập nhật</button>
             <button type="button" class="btn">Tìm kiếm</button>
@@ -316,7 +322,7 @@
         </thead>
         <tbody>
         @foreach($schedules as $schedule)
-            <tr>
+            <tr class="changeColor" onclick="changeColor(event)">
                 <td>{{ $schedule->id }}</td>
                 <td>{{ $schedule->user_id }}</td>
                 <td>{{ $schedule->pet_id }}</td>
@@ -355,6 +361,20 @@
 </div>
 
 <script>
+    function changeColor(event) {
+        // Get the current clicked row
+        var row = event.currentTarget;
+
+        // Remove the yellow background from all rows
+        var rows = document.querySelectorAll('tr.changeColor');
+        rows.forEach(function(row) {
+            row.classList.remove('yellow-background');
+        });
+
+        // Add the yellow background to the clicked row
+        row.classList.add('yellow-background');
+    }
+
     function showConfirmation(action) {
         document.getElementById('actionType').innerText = action.toLowerCase();
         const confirmBtn = document.getElementById('confirmBtn');
@@ -387,35 +407,35 @@
         <div class="form-section">
             <div class="form-left">
                 <div class="form-group" style="width: 100%;">
-                    <label for="infoMaSo">Mã số:</label>
+                    <label for="infoMaSo" class="text-start">Mã số:</label>
                     <input type="text" class="form-control" id="infoMaSo" readonly name="maso">
                 </div>
                 <div class="form-group" style="width: 100%;">
-                    <label for="infoTenKhachHang">Tên khách hàng:</label>
+                    <label for="infoTenKhachHang" class="text-start">Tên khách hàng:</label>
                     <input type="text" class="form-control" id="infoTenKhachHang" readonly name="tenkh">
                 </div>
                 <div class="form-group" style="width: 100%;">
-                    <label for="infoNgayCapSo">Ngày cấp sổ:</label>
+                    <label for="infoNgayCapSo" class="text-start">Ngày cấp sổ:</label>
                     <input type="text" class="form-control" id="infoNgayCapSo" readonly name="date">
                 </div>
             </div>
             <div class="form-right">
-                <div class="form-group" style="width: 100%;">
-                    <label for="infoSoDienThoai">Số điện thoại:</label>
+                <div class="form-group d-flex justify-content-start" style="width: 100%;">
+                    <label for="infoSoDienThoai" class="text-start">Số điện thoại:</label>
                     <input type="text" class="form-control" id="infoSoDienThoai" readonly name="sdt">
                 </div>
                 <div class="form-group" style="width: 100%;">
-                    <label for="infoLoaiThuCung">Loại thú cưng:</label>
+                    <label for="infoLoaiThuCung" class="text-start">Loại thú cưng:</label>
                     <input type="text" class="form-control" id="infoLoaiThuCung" readonly name="typePet">
                 </div>
                 <div class="form-group" style="width: 100%;">
-                    <label for="infoGiongThuCung">Giống thú cưng:</label>
+                    <label for="infoGiongThuCung" class="text-start">Giống thú cưng:</label>
                     <input type="text" class="form-control" id="infoGiongThuCung" readonly name="giongPet">
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" onclick="closeModal('infoModal')">Đóng</button>
+            <button type="button" class="btn btn-secondary" style="background-color: #33ccff" onclick="closeModal('infoModal')">Đóng</button>
         </div>
     </div>
 </div>
@@ -446,5 +466,3 @@
 </script>
 </body>
 </html>
-git config --global user.email "2151173777@e.tlu.edu.vn"
-git config --global user.name "huyiiii"

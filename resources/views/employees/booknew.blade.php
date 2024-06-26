@@ -232,9 +232,56 @@
                                       method="POST" style="display:inline;">
                                     @csrf
                                     @method('PUT')
-                                    <input type="text" id="cancelMessage" name="message" style="display: none"
-                                           value="">
-                                    <button class="btn btn-danger btn-sm">Hủy</button>
+                                    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="cancelModalLabel">Xác Nhận Từ Chối Lịch Hẹn</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Vui lòng chọn hoặc nhập lý do:
+                                                    <div class="form-check mt-2">
+                                                        <input class="form-check-input" type="radio" name="cancelReason" id="reason1" value="Lên lịch sai">
+                                                        <label class="form-check-label" for="reason1">
+                                                            Lên lịch sai
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="cancelReason" id="reason2" value="Không có thật">
+                                                        <label class="form-check-label" for="reason2">
+                                                            Không có thật
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="cancelReason" id="reason3"
+                                                               value="Khách hàng hủy yêu cầu">
+                                                        <label class="form-check-label" for="reason3">
+                                                            Khách hàng hủy yêu cầu
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="cancelReason" id="reason4" value="Lý do khác">
+                                                        <label class="form-check-label" for="reason4">
+                                                            Lý do khác
+                                                        </label>
+                                                    </div>
+                                                    <div id="otherReasonContainer" class="mt-2" style="display: none;">
+                                                        <input type="text" class="form-control" id="otherReason" placeholder="Nhập lý do khác">
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" style=" width :100px" id="confirmCancelAppointmentButton" data-bs-dismiss="modal">Hủy
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary" style=" width :100px" id="confirmAppointmentButton">Xác
+                                                        nhận
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-danger btn-sm"  onclick="handleCaneclSubmit(event, 'cancelForm')">Hủy</button>
                                 </form>
                             </td>
                     @endforeach
@@ -259,7 +306,8 @@
                 Bạn có muốn xác nhận đặt lịch không?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" style=" width :100px" data-bs-dismiss="modal">Hủy
+                <button type="button" class="btn btn-secondary" style=" width :100px" id="cancelAppointmentButton"
+                        data-bs-dismiss="modal">Hủy
                 </button>
                 <button type="button" class="btn btn-primary" style=" width :100px" id="confirmAppointmentButton">Xác
                     nhận
@@ -328,6 +376,29 @@
     function handleSubmit(event, formId) {
         event.preventDefault(); // Prevent default form submission
         const form = document.getElementById(formId);
+        const confirmAppointmentButton = document.getElementById("confirmAppointmentButton");
+        const cancelAppointmentButton = document.getElementById("cancelAppointmentButton");
+        confirmAppointmentButton.addEventListener('click', function () {
+            form.submit();
+        });
+        cancelAppointmentButton.addEventListener('click', function () {
+            var confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'), {});
+            confirmationModal.hide();
+        });
+
+    } function handleCaneclSubmit(event, cancelForm) {
+        event.preventDefault(); // Prevent default form submission
+        const form = document.getElementById(cancelForm);
+        const confirmAppointmentButton = document.getElementById("confirmAppointmentButton");
+        const confirmCancelAppointmentButton = document.getElementById("confirmCancelAppointmentButton");
+        confirmAppointmentButton.addEventListener('click', function () {
+            form.submit();
+        });
+        confirmCancelAppointmentButton.addEventListener('click', function () {
+            var confirmationModal = new bootstrap.Modal(document.getElementById('cancelModal'), {});
+            confirmationModal.hide();
+        });
+
     }
 </script>
 <script>
