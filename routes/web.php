@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomAuthController;
+use App\Http\Controllers\HealthRecordController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserRuleController;
@@ -77,16 +78,19 @@ Route::middleware(['authEmployee'])->group(function () {
     Route::get('employees/export_imediccine', [UserController::class, 'export_imediccine'])->name('employees.export_imediccine');
 });
 Route::middleware(['authDoctor'])->group(function () {
-    Route::resource('health_records', \App\Http\Controllers\HealthRecordController::class);
+    Route::resource('doctors/health_records', \App\Http\Controllers\HealthRecordController::class);
     Route::resource('doctors/schedules', \App\Http\Controllers\ScheduleController::class);
     Route::get('doctors/manager/health_records', [\App\Http\Controllers\HealthRecordController::class, 'managerRecordHealth']);
+    Route::get('doctors/manager/health_records', [\App\Http\Controllers\HealthRecordController::class, 'managerRecordHealth']);
+    Route::get('/doctors/health-record', [\App\Http\Controllers\HealthRecordController::class, 'index'])->name('doctors.health-record');
 
-    Route::get('/doctors/health-record', function () {
-        return view('managers.kien.Examination_schedule');
-    })->name('doctors.health-record');
-    Route::get('/doctors/healthcares', function () {
-        return view('managers.kien.healthcares');
-    })->name('doctors.healthcares');
+
+//    Route::get('/doctors/health-record', function () {
+//        return view('managers.kien.Examination_schedule');
+//    })->name('doctors.health-record');
+    Route::get('/doctors/healthcares', [\App\Http\Controllers\ScheduleController::class, 'index'])->name('doctors.healthcares');
+    Route::post('/doctors/healthcares', [HealthRecordController::class, 'createHealthRecord'])->name('create.health.record');
+
 });
 
 

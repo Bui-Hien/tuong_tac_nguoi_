@@ -14,8 +14,13 @@ class HealthRecordController extends Controller
 {
     public function index()
     {
-        $healthRecords = HealthRecord::with(['doctor', 'pet'])->get();
-        return view('doctors.healthrecords.index', compact('healthRecords'));
+        $Lists = User::select('users.id', 'users.name as user_name', 'services.name as service_name', 'pets.name as pet_name', 'schedules.created_at')
+            ->join('schedules', 'schedules.customer_id', '=', 'users.id')
+            ->join('services', 'services.id', '=', 'schedules.service_id')
+            ->join('pets', 'pets.customer_id', '=', 'users.id')
+            ->get();
+
+        return view('managers.kien.Examination_schedule', compact('Lists'));
     }
 
     public function create()
@@ -28,13 +33,31 @@ class HealthRecordController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'idbs' => 'required|exists:users,id',
+            'idpet' => 'required|exists:pets,id',
+            'sdt' => 'required|number',
+            'idthuoc' => 'required',
             'date' => 'required|date',
-            'doctor_id' => 'required|exists:users,id',
-            'pet_id' => 'required|exists:pets,id',
         ]);
 
         HealthRecord::create($request->all());
-        return redirect()->route('health_records.index')->with('success', 'Health Record created successfully.');
+    }
+
+    public function createHealthRecord(Request $request)
+    {
+        $request->validate([
+            'idbs' => 'required',
+            'idpet' => 'required',
+            'sdt' => 'required',
+            'idthuoc' => 'required',
+            'date' => 'required',
+        ]);
+        HealthRecord::create([
+            'date' => $request->input('date'),
+            'pet_id' =>  $request->input('idpet'),
+            'doctor_id' => 4,
+        ]);
+        return back();
     }
 
     public function show(HealthRecord $healthRecord)
@@ -102,7 +125,7 @@ class HealthRecordController extends Controller
                 'pets.species'
             )
             ->get();
-        return view('doctors.healthrecords.manager-health-record', compact('healthRecords', 'healthRecordInput'));
+        return view('manager.healthrecords.manager-health-record', compact('healthRecords', 'healthRecordInput'));
     }
 
     public function healthRecordInput($health_record_id)

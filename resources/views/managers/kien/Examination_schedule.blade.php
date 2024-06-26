@@ -144,8 +144,8 @@
         <h6><i class="fas fa-user-md"></i>Bác sĩ</h6>
     </div>
     <div class="divider"></div>
-    <a href="{{ route('doctors.health-record') }}" class="btn active"><i class="fas fa-calendar-alt p-2"></i> Xem lịch
-        khám</a>
+    <a href="{{ route('doctors.health-record') }}" class="btn active"><i class="fas fa-calendar-alt p-2"></i> Xem lịch khám</a>
+
     <a href="{{ route('doctors.healthcares') }}" class="btn active"><i class="fas fa-book-medical p-1"></i> Quản lý sổ
         khám bệnh</a>
 </div>
@@ -169,36 +169,18 @@
         </tr>
         </thead>
         <tbody id="tableBody">
-        <tr>
-            <td>1</td>
-            <td>Nguyễn Thế</td>
-            <td>Thăm khám</td>
-            <td>Mèo</td>
-            <td>22/05/2023, 07:19 Sáng</td>
-            <td>
-                <button class="btn xem-thong-tin">Xem thông tin</button>
-            </td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Quốc Huy</td>
-            <td>Tắm</td>
-            <td>Chó</td>
-            <td>12/06/2023, 13:19 Chiều</td>
-            <td>
-                <button class="btn xem-thong-tin">Xem thông tin</button>
-            </td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>Xuân Hiền</td>
-            <td>Tia lông</td>
-            <td>Mèo</td>
-            <td>31/05/2023, 19:19 Tối</td>
-            <td>
-                <button class="btn xem-thong-tin">Xem thông tin</button>
-            </td>
-        </tr>
+        @foreach($Lists as $List)
+            <tr>
+                <td>{{ $List->id }}</td>
+                <td>{{ $List->user_name }}</td>
+                <td>{{ $List->service_name }}</td>
+                <td>{{ $List->pet_name }}</td>
+                <td>{{ $List->created_at }}</td>
+                <td>
+                    <button class="btn xem-thong-tin">Xem thông tin</button>
+                </td>
+            </tr>
+        @endforeach
         </tbody>
     </table>
 </div>

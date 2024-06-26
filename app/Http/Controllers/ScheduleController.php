@@ -14,15 +14,30 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        $schedules = User::select('users.id', 'users.name', 'services.type', 'schedules.date', 'users.phone', 'pets.name AS pet_name', 'schedules.message', 'pets.species')
-            ->join('schedules', 'users.id', '=', 'schedules.customer_id')
-            ->join('pets', 'users.id', '=', 'pets.customer_id')
-            ->join('services', 'schedules.service_id', '=', 'services.id')
+        $schedules = User::select(
+            'health_records.id',
+            'users.id AS user_id',
+            'health_records.pet_id',
+            'prescriptions.id as prescriptions_id',
+            'users.phone',
+            'health_records.created_at as date'
+        )
+            ->join('health_records', 'users.id', '=', 'health_records.doctor_id')
+            ->join('prescriptions', 'prescriptions.health_record_id', '=', 'health_records.id')
+            ->whereNull('users.deleted_at')
             ->get();
-        echo json_encode($schedules);
-        return view('doctors.schedules.index', compact('schedules'));
+        return view('managers.kien.healthcares', compact('schedules'));
     }
+    public function LichKham()
+    {
+        $Lists = User::select('users.id', 'users.name as user_name', 'services.name as service_name', 'pets.name as pet_name', 'schedules.created_at')
+            ->join('schedules', 'schedules.customer_id', '=', 'users.id')
+            ->join('services', 'services.id', '=', 'schedules.service_id')
+            ->join('pets', 'pets.customer_id', '=', 'users.id')
+            ->get();
 
+        return view('managers.kien.Examination_schedule', compact('Lists'));
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -70,11 +85,13 @@ class ScheduleController extends Controller
     {
         //
     }
+
     public function CreateBuild()
     {
         $services = Service::all();
         return view('customer.booking', compact('services'));
     }
+
     public function CfCfBuild(string $id)
     {
         // Find the schedule by ID
