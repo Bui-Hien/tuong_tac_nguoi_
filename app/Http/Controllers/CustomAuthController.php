@@ -118,7 +118,7 @@ class CustomAuthController extends Controller
                     $request->session()->put('loginId', $user->id);
                     $request->session()->put('roleId', 2);
                     $request->session()->put('name', $user->name);
-                    return redirect('/doctors.health-record');
+                    return redirect('doctors/health_records');
                 } else {
                     return back()->with('fail', 'User does not have required permission');
                 }

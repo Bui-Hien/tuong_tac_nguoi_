@@ -18,7 +18,7 @@ class HealthRecordController extends Controller
             ->join('schedules', 'schedules.customer_id', '=', 'users.id')
             ->join('services', 'services.id', '=', 'schedules.service_id')
             ->join('pets', 'pets.customer_id', '=', 'users.id')
-            ->get();
+            ->paginate(7);
 
         return view('managers.kien.Examination_schedule', compact('Lists'));
     }
@@ -57,7 +57,14 @@ class HealthRecordController extends Controller
             'pet_id' =>  $request->input('idpet'),
             'doctor_id' => 4,
         ]);
-        return back();
+        Prescription::created([
+            'id' => $request->input('idthuoc'),
+        ]);
+        User::created([
+            'id' => $request->input('idbs'),
+            'phone' => $request->input('sdt'),
+        ]);
+        return back()->with('success', 'Health record created successfully');
     }
 
     public function show(HealthRecord $healthRecord)

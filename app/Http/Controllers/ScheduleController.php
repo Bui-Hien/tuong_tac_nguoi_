@@ -20,9 +20,13 @@ class ScheduleController extends Controller
             'health_records.pet_id',
             'prescriptions.id as prescriptions_id',
             'users.phone',
-            'health_records.created_at as date'
+            'health_records.created_at as date',
+
+            'pets.species',
+            'users.name'
         )
             ->join('health_records', 'users.id', '=', 'health_records.doctor_id')
+            ->join('pets', 'pets.id', '=', 'health_records.pet_id')
             ->join('prescriptions', 'prescriptions.health_record_id', '=', 'health_records.id')
             ->whereNull('users.deleted_at')
             ->get();

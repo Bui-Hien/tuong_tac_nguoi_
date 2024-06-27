@@ -16,28 +16,33 @@
             top: 0;
             left: 0;
         }
+
         .sidebar h6, .sidebar p {
             text-align: center;
             font-size: 22px;
         }
+
         .sidebar .divider {
             border-top: 1px solid black;
             margin: 10px 0;
         }
+
         .sidebar .btn {
             width: 100%;
             height: 60px;
             color: black;
             border: none;
             margin-top: 20px;
-            /*background-color: #DDDDDD;*/
+            background-color: #DDDDDD;
         }
+
         .sidebar .btn:hover {
             background-color: #DDDDDD;
         }
+
         .topbar {
             background-color: #f8f9fa;
-            padding:  22px 12px 12px;
+            padding: 22px 12px 12px;
             display: flex;
             justify-content: flex-end;
             align-items: center;
@@ -49,75 +54,72 @@
             height: 65px;
             z-index: 1000;
         }
+
         .main-content {
             margin-left: 200px;
             padding: 80px 20px 20px 20px;
         }
+
         .form-section {
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
         }
+
         .form-group {
             display: flex;
             align-items: center;
             margin-bottom: 15px;
         }
+
         .form-group label {
             width: 30%;
         }
+
         .form-left, .form-right {
             width: 48%;
         }
+
         .form-left .form-group input, .form-left .form-group select,
         .form-right .form-group input, .form-right .form-group select {
             width: 70%;
         }
-        .user-info {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .user-info img {
-            margin-right: 10px;
-        }
+
         .btn-group {
             display: flex;
             justify-content: space-between;
-
         }
+
         .btn-group button {
             width: 100px;
             height: 50px;
-            background-color: #6c757d;
-            color: white;
+            background-color: #D9D9D9;
+            color: black;
             border: none;
-            margin: 30px 100px 0 100px ;
+            margin: 30px 100px 0 100px;
             padding: 2.5px 5px;
         }
+
         .btn-group button:hover {
             transition: background-color 0.3s;
+            background-color: #9ADAFE;
+            color: black;
         }
-        .btn-group .tao-so-btn:hover {
-            background-color: #9adafe;
-        }
+
         .btn-group .xoa-btn:hover {
             background-color: red;
         }
-        .btn-group .cap-nhat-btn:hover {
-            background-color: lightblue;
-        }
+
         .section-divider {
             border-top: 1px solid black;
             margin: 40px 0;
         }
+
         .table th, .table td {
             text-align: center;
         }
-        .table .btn {
-            background-color: #9adafe;
-            color: white;
-        }
+
+        /* Modal styles */
         .modal {
             display: none;
             position: fixed;
@@ -126,54 +128,89 @@
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
-            background-color: rgb(0,0,0);
-            background-color: rgba(0,0,0,0.4);
+            background-color: rgba(0, 0, 0, 0.5);
         }
+
         .modal-content {
-            background-color: #fefefe;
+            background-color: white;
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
+            width: 30%;
+            border-radius: 5px;
         }
-        .modal-content.center-text {
+
+        .modal-content h5 {
             text-align: center;
+            margin-bottom: 20px;
         }
+
+        .modal-content p {
+            text-align: left;
+        }
+
         .modal-footer {
             display: flex;
             justify-content: flex-end;
-            margin-top: 20px;
+            padding-top: 20px;
         }
-        .modal-footer button {
+
+        .modal-footer .btn {
+            width: 100px;
             margin-left: 10px;
         }
-        .modal-content .form-section {
-            display: flex;
-            justify-content: space-between;
+
+        .modal-footer .btn-secondary {
+            background-color: #D9D9D9;
+            border: 1px solid #dee2e6;
+            color: black;
+        }
+
+        .modal-footer .btn-primary {
+            background-color: #D9D9D9;
+            border: none;
+            color: black;
+        }
+
+        .modal-footer .btn:hover {
+            background-color: #007bff;
+            color: black;
+        }
+
+        /* Success modal styles */
+        .success-modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 30%;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .success-modal-content h5 {
             margin-bottom: 20px;
         }
-        .modal-content .form-left, .modal-content .form-right {
-            width: 48%;
+
+        .success-modal-content button {
+            background-color: #6c757d;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
         }
-        .modal-content .form-group {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
+        .yellow-background {
+            background-color: #D9D9D9;
         }
-        .modal-content .form-group label {
-            width: 40%;
-        }
-        .modal-content .form-group input {
-            width: 60%;
-        }
+        /*.success-modal-content button:hover {*/
+        /*    background-color: #D9D9D9;*/
+        /*}*/
     </style>
 </head>
 <body>
 <div class="sidebar">
     <div class="text-center mb-4">
-        <h6><i class="fas fa-user-md"></i> Bác sĩ</h6>
+        <h6><i class="fas fa-user-md"></i>Quản lý</h6>
     </div>
     <div class="divider"></div>
     <button class="btn"><i class="fas fa-book-medical"></i> Quản lý tài khoản</button>
@@ -185,102 +222,131 @@
     </div>
 </div>
 <div class="main-content">
-    <div class="form-section mt-3">
-        <div class="form-left">
-            <div class="form-group">
-                <label for="doctorId">Tên nhân viên:</label>
-                <input type="text" class="form-control" id="doctorId">
-            </div>
-            <div class="form-group">
-                <label for="password">Mật khẩu:</label>
-                <input type="password" class="form-control" id="password">
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email">
-            </div>
-            <div class="form-group">
-                <label for="gender">Giới tính:</label>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="gender" id="male" value="male">
-                    <label class="form-check-label" for="male">Nam</label>
+    <form class="form-section mt-3 d-flex flex-column">
+        <div class="d-flex flex-row  justify-content-between gap-3">
+            <div class="form-left">
+                <div class="form-group">
+                    <label for="doctorId">Tên nhân viên:</label>
+                    <input type="text" class="form-control" id="doctorId" name="employee_name"
+                           value="{{ request()->input('employee_name') }}">
                 </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="gender" id="female" value="female">
-                    <label class="form-check-label" for="female">Nữ</label>
+                <div class="form-group">
+                    <label for="password">Mật khẩu:</label>
+                    <input type="password" class="form-control" id="password">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email"
+                           value="{{ request()->input('email') }}">
+                </div>
+                <div class="form-group">
+                    <label for="gender">Giới tính:</label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="sex" id="nam"
+                               value="0" {{ request()->input('sex')==0 ? "checked":  "" }}>
+                        <label class="form-check-label" for="male">Nam</label>
+                    </div>
+                    <div class="form-check form-check-inline p-2">
+                        <input class="form-check-input" type="radio" name="sex" id="nu"
+                               value="1" {{ request()->input('sex')==1 ? "checked":  "" }}> <label
+                            class="form-check-label" for="female">Nữ</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-right">
+                <div class="form-group">
+                    <label for="role">Chức vụ:</label>
+                    <select id="chucVu" class="form-control" name="role_id">
+                        <option value="" selected>Chọn chức vụ...</option>
+                        <option value="1" {{ request()->input('role_id')==1? "checked":  "" }}>Bác sĩ</option>
+                        <option value="2" {{ request()->input('role_id')==2? "checked":  "" }}>Nhân viên</option>
+                        <option value="3" {{ request()->input('role_id')==3? "checked":  "" }}>Quản lý</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="issueDate">Ngày cấp:</label>
+                    <input type="date" class="form-control" id="issueDate" name="date"
+                           value="{{ request()->input('date') }}">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Số điện thoại:</label>
+                    <input type="text" class="form-control" id="phone" name="phone"
+                           value="{{ request()->input('phone') }}">
                 </div>
             </div>
         </div>
-        <div class="form-right">
-            <div class="form-group">
-                <label for="role">Chức vụ:</label>
-                <select class="form-control" id="role">
-                    <option>Quản lý</option>
-                    <option>Bác sĩ</option>
-                    <option>Nhân viên</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="issueDate">Ngày cấp:</label>
-                <input type="date" class="form-control" id="issueDate">
-            </div>
-            <div class="form-group">
-                <label for="phone">Số điện thoại:</label>
-                <input type="text" class="form-control" id="phone">
-            </div>
+        <div class="btn-group">
+            <button type="button" class="btn tao-so-btn " onclick="showConfirmation('Tạo sổ')">Tạo sổ</button>
+            <button type="button" class="btn xoa-btn" onclick="showConfirmation('Xóa')"> Xóa</button>
+            <button type="button" class="btn cap-nhat-btn" onclick="showConfirmation('Cập nhật')"> Cập nhật</button>
+            <button type="submit" class="btn"></i> Tìm kiếm</button>
         </div>
-    </div>
-    <div class="btn-group">
-        <button type="button" class="btn tao-so-btn " onclick="showConfirmation('Tạo sổ')">Tạo sổ</button>
-        <button type="button" class="btn xoa-btn" onclick="showConfirmation('Xóa')"> Xóa</button>
-        <button type="button" class="btn cap-nhat-btn" onclick="showConfirmation('Cập nhật')"> Cập nhật</button>
-        <button type="button" class="btn"></i> Tìm kiếm</button>
-    </div>
-        </form>
-        <div class="section-divider"></div>
-        <table class="table table-bordered mt-4">
-            <thead>
-                <tr>
-                    <th>Mã</th>
-                    <th>Tên nhân viên</th>
-                    <th>Giới tính</th>
-                    <th>Chức vụ</th>
-                    <th>Ngày cấp</th>
-                    <th>SDT</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>QL01</td>
-                    <td>Vương Kiên</td>
-                    <td>Nam</td>
-                    <td>Quản lý</td>
-                    <td>25/5/2024</td>
-                    <td>09xxxxxxxx</td>
-                    <td>aaa@gmail.com</td>
-                </tr>
-                <tr>
-                    <td>BS01</td>
-                    <td>Đấu Thế</td>
-                    <td>Nam</td>
-                    <td>Bác sĩ</td>
-                    <td>26/5/2024</td>
-                    <td>09xxxxxxxx</td>
-                    <td>bbb@gmail.com</td>
-                </tr>
-                <tr>
-                    <td>NV01</td>
-                    <td>Xuân Hiền</td>
-                    <td>Nam</td>
-                    <td>Nhân viên</td>
-                    <td>26/5/2024</td>
-                    <td>09xxxxxxxx</td>
-                    <td>ccc@gmail.com</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    </form>
+    <div class="section-divider"></div>
+    <table class="table table-bordered">
+        <thead class="table-light">
+        <tr>
+            <th scope="col" style="background-color: #9adafe ">Mã</th>
+            <th scope="col " style="background-color: #9adafe ">Tên</th>
+            <th scope="col" style="background-color: #9adafe ">Giới tính</th>
+            <th scope="col" style="background-color: #9adafe ">Chức vụ</th>
+            <th scope="col" style="background-color: #9adafe ">Ngày sinh</th>
+            <th scope="col" style="background-color: #9adafe ">SĐT</th>
+            <th scope="col" style="background-color: #9adafe ">Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach($results as $result)
+            <tr class="clickable-row changeColor" data-id="{{ $result->id }}" onclick="changeColor(event)">
+                <td>{{ $result->id }}</td>
+                <td>{{ $result->name }}</td>
+                <td>{{ $result->sex == 0 ? 'Nam' : 'Nữ' }}</td>
+                <td>
+                    @if($result->userRules->isNotEmpty())
+                        {{$result->userRules[0]->rule->id ==1? "Nhân viên" : ""}}
+                        {{$result->userRules[0]->rule->id ==2? "Bác sĩ" : ""}}
+                        {{$result->userRules[0]->rule->id ==3? "Quản lý" : ""}}
+                    @endif
+                </td>
+                <td>{{ $result->birthday }}</td>
+                <td>{{ $result->phone != null ? $result->phone : 'null' }}</td>
+                <td>{{ $result->email }}</td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+    @if($results->lastPage() >1)
+        <div class="d-flex justify-content-end">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <!-- Nút Previous -->
+                    @if ($results->previousPageUrl())
+                        <li class="page-item"><a class="page-link" href="{{ $results->previousPageUrl() }}">Previous</a>
+                        </li>
+                    @else
+                        <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                    @endif
+
+                    <!-- Danh sách các trang -->
+                    @for ($i = 1; $i <= $results->lastPage(); $i++)
+                        <li class="page-item {{ $results->currentPage() == $i ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $results->url($i) }}">{{ $i }}</a>
+                        </li>
+                    @endfor
+
+                    <!-- Nút Next -->
+                    @if ($results->nextPageUrl())
+                        <li class="page-item"><a class="page-link"
+                                                 href="{{ $results->nextPageUrl() }}">Next</a>
+                        </li>
+                    @else
+                        <li class="page-item disabled"><span class="page-link">Next</span></li>
+                    @endif
+                </ul>
+            </nav>
+        </div>
+    @endif
+</div>
 
 <!-- Confirmation Modal -->
 <div id="confirmationModal" class="modal">
@@ -305,6 +371,19 @@
 
 <!-- JavaScript -->
 <script>
+    function changeColor(event) {
+        // Get the current clicked row
+        var row = event.currentTarget;
+
+        // Remove the yellow background from all rows
+        var rows = document.querySelectorAll('tr.changeColor');
+        rows.forEach(function(row) {
+            row.classList.remove('yellow-background');
+        });
+
+        // Add the yellow background to the clicked row
+        row.classList.add('yellow-background');
+    }
     let currentAction = '';
 
     function showConfirmation(action) {

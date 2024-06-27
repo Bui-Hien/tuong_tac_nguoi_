@@ -110,6 +110,44 @@ class UserController extends Controller
         }
         echo $user;
         return view('managers.edit-employee', compact('user'));
+    }    public
+    function ManagerEmployee(Request $request)
+    {
+        $employeeId = $request->input('employee_id');
+        $roleId = $request->input('role_id');
+        $employeeName = $request->input('employee_name');
+        $date = $request->input('date');
+        $phone = $request->input('phone');
+        $sex = $request->input('sex');
+
+        $results = User::with('userRules.rule')
+            ->whereHas('userRules.rule', function ($query) {
+                $query->whereIn('id', [1, 2, 3]);
+            });
+
+        if ($employeeId) {
+            $results->where('id', $employeeId);
+        }
+        if ($roleId) {
+            $results->whereHas('userRules.rule', function ($query) use ($roleId) {
+                $query->where('id', $roleId);
+            });
+        }
+        if ($employeeName) {
+            $results->where('name', 'like', '%' . $employeeName . '%');
+        }
+        if ($date) {
+            $results->whereDate('created_at', $date);
+        }
+        if ($phone) {
+            $results->where('phone', 'like', '%' . $phone . '%');
+        }
+        if ($sex) {
+            $results->where('sex', 'like', '%' . $sex . '%');
+        }
+
+        $results = $results->paginate(5);
+        return view('managers.kien.manager_employee', compact('results'));
     }
 
 
