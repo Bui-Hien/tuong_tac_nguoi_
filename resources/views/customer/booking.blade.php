@@ -23,7 +23,7 @@
     </div>
     <ul class=" header-middle nav nav-pills nav-fill ">
         <li class="nav-item me-5 ">
-            <img class="w-30" style="height: 70px;" src="{{ asset('img/img.png') }}" alt="Active">
+            <img class="w-30" style="height: 70px;" src="{{ asset('img/Screenshot 2024-06-27 121258.png') }}" alt="Active">
 
         </li>
         <li class="  nav-item  d-flex align-items-center ">

@@ -66,7 +66,7 @@
     </div>
     <ul class=" header-middle  nav nav-pills nav-fill d-flex justify-content-between py-2 ">
         <li class="nav-item">
-            <img class="w-30" src="./../../img/img.png" alt="Active">
+            <img class="w-30" style="height: 70px;" src="{{ asset('img/Screenshot 2024-06-27 121258.png') }}" alt="Active">
         </li>
         <li class="nav-item mt-2">
             <h3 class="mb-0 fw-bolder">PetHaven vì sức khoẻ thú cưng của bạn</h3>

@@ -415,7 +415,7 @@
                     <input type="text" class="form-control" id="infoTenKhachHang" readonly name="tenkh">
                 </div>
                 <div class="form-group" style="width: 100%;">
-                    <label for="infoNgayCapSo" class="text-start">Ngày cấp sổ:</label>
+                    <label for="infoNgagyCapSo" class="text-start">Ngày cấp sổ:</label>
                     <input type="text" class="form-control" id="infoNgayCapSo" readonly name="date">
                 </div>
             </div>

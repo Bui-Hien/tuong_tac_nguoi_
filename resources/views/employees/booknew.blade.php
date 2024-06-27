@@ -175,7 +175,7 @@
         <div class="col-md-10 p-0">
             <div class="header d-flex justify-content-end">
                 <span class="fs-4">{{Session::get("name")}}
-                <img class="w-30 h-30" style="width: 50px" src="../../img/logo.jpg" alt=""></span>
+                <img class="w-30 h-30" style="width: 50px" src="../../img/Screenshot%202024-06-27%20121258.png" alt=""></span>
             </div>
             <div class="p-4">
                 <h3 class="text-center mb-3">Sắp xếp lịch khám</h3>
