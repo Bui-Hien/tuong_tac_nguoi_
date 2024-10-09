@@ -58,23 +58,24 @@
                         <label for="name" class="form-label">Họ Và Tên</label>
                         <input type="text" class="form-control" id="name" name="name" value="{{old("name")}}"
                                placeholder="Nguyen Van A">
-                        @error("name")
-                        <div class="text-danger">Vui lòng nhập họ và tên.</div>
-                        @enderror
+                        @if ($errors->has('name'))
+                            <span class="text-danger">{{ $errors->first('name') }}</span>
+                        @endif
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Số Điện Thoại</label>
                         <input type="text" class="form-control" id="phone" name="phone" value="{{old("phone")}}"
                                placeholder="0989883833">
-                        @error("phone")
-                        <div class="text-danger">Vui lòng nhập số điện thoại.</div>@enderror
-
+                        @if ($errors->has('phone'))
+                            <span class="text-danger">{{ $errors->first('phone') }}</span>
+                        @endif
                     </div>
                     <div class="mb-3">
                         <label for="date" class="form-label">Ngày Đặt Dịch Vụ</label>
                         <input type="date" class="form-control" name="date" value="{{old("date")}}" id="date">
-                        @error("date")
-                        <div class="text-danger">Vui lòng chọn ngày đặt dịch vụ.</div> @enderror
+                        @if ($errors->has('phone'))
+                            <span class="text-danger">{{ $errors->first('phone') }}</span>
+                        @endif
 
                     </div>
                     <div class="mb-3">
@@ -89,8 +90,9 @@
                                 <option value="{{$service->id}}">{{$service->name}}</option>
                             @endforeach
                         </select>
-                        @error("service")
-                        <div class="text-danger">Vui lòng chọn loại dịch vụ hoặc loại chăm sóc.</div> @enderror
+                        @if ($errors->has('service'))
+                            <span class="text-danger">{{ $errors->first('service') }}</span>
+                        @endif
 
                     </div>
                     <div class="d-flex justify-content-center">

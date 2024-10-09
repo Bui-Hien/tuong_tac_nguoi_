@@ -904,7 +904,6 @@ class UserController extends Controller
     }
 
 
-
     public function StoreBuild(Request $request)
     {
         // Validate each field using separate methods
@@ -932,7 +931,7 @@ class UserController extends Controller
     protected function validateNameBuild($request)
     {
         $request->validate([
-            'name' => 'required|max:70|regex:/^[^~!@#\$%\^&\*\(\)_\+\<\>\[\]\{\}]+$/',
+            'name' => 'required|max:70|regex:/^[a-zA-Z\s]+$/',
         ], [
             'name.required' => 'Họ tên không được để trống.',
             'name.max' => 'Họ tên nhập vượt quá 70 ký tự, vui lòng nhập lại.',
