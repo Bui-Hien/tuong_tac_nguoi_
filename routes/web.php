@@ -3,6 +3,7 @@
 use App\Http\Controllers\CustomAuthController;
 use App\Http\Controllers\HealthRecordController;
 use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\PetController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserRuleController;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +23,6 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('logout', [CustomAuthController::class, 'logout']);
-
 Route::middleware(['alreadyLoggedIn'])->group(function () {
     Route::post('register-user', [CustomAuthController::class, 'registerUser'])->name('register-user');
     Route::post('login-manager', [CustomAuthController::class, 'PostManagerLogin'])->name('login-manager');
@@ -67,7 +67,18 @@ Route::middleware(['authManager'])->group(function () {
 });
 
 Route::middleware(['authEmployee'])->group(function () {
-    Route::get('employees', [\App\Http\Controllers\UserController::class, 'employee']);
+    Route::get('employees/schedulenew', [UserController::class, 'schedulenew'])->name('employees.schedulenew');
+    Route::get('employees/schedulecf', [\App\Http\Controllers\UserController::class, 'schedulecf'])->name('employees.schedulecf');
+    Route::get('employees/schedulecancel', [\App\Http\Controllers\UserController::class, 'schedulecancel'])->name('employees.schedulecancel');
+
+
+    Route::put('employees/customers/{id}/cf-build', [\App\Http\Controllers\ScheduleController::class, 'CfCfBuild'])->name('cf-update-build');
+    Route::put('employees/customers/{id}/cancel-build', [\App\Http\Controllers\ScheduleController::class, 'CancelBuild'])->name('cancel-update-build');
+    Route::resource('employees/medicines', MedicineController::class);
+
+    Route::get('employees/export_imediccine', [UserController::class, 'export_imediccine'])->name('employees.export_imediccine');
+    Route::resource('employees/pets', PetController::class);
+
 });
 Route::middleware(['authDoctor'])->group(function () {
     Route::resource('doctors/health_records', \App\Http\Controllers\HealthRecordController::class);

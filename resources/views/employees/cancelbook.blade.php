@@ -158,8 +158,8 @@
                             nhận
                             ({{ $statusCounts->where('status', 1)->first()->status_count ?? 0 }})</a>
                     </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{{ route('employees.schedulecancel') }}">Đã hủy
+                    <li class="nav-item ">
+                        <a class="nav-link active" href="{{ route('employees.schedulecancel') }}">Đã hủy
                             ({{ $statusCounts->where('status', 2)->first()->status_count ?? 0 }})</a>
                     </li>
                 </ul>
@@ -218,7 +218,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-secondary btn-primary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>

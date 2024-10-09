@@ -305,7 +305,7 @@
         </div>
         <div class="btn-group">
             {{--            onclick="showConfirmation('Thêm')"--}}
-            <button type="submit" class="btn tao-so-btn">Tạo sổ</button>
+            <button type="button" class="btn tao-so-btn" onclick="showConfirmation('Thêm')">Tạo sổ</button>
             <button type="button" class="btn xoa-btn" onclick="showConfirmation('Xóa')"> Xóa</button>
             <button type="button" class="btn cap-nhat-btn" onclick="showConfirmation('Cập nhật')"> Cập nhật</button>
             <button type="button" class="btn">Tìm kiếm</button>
@@ -353,7 +353,7 @@
 
 <div id="confirmationModal" class="modal">
     <div class="modal-content">
-        <h5>Xác nhận sửa thông tin</h5>
+        <h5>Xác nhận <span id="actionType"></span> thông tin</h5>
         <p>Bạn có muốn <span id="actionType"></span> sổ khám không?</p>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" onclick="closeModal('confirmationModal')">Hủy</button>

@@ -14,7 +14,7 @@ class HealthRecordController extends Controller
 {
     public function index()
     {
-        $Lists = User::select('users.id', 'users.name as user_name', 'services.name as service_name', 'pets.name as pet_name', 'schedules.created_at')
+        $Lists = User::select('users.id', 'users.phone', 'users.name as user_name', 'services.name as service_name', 'pets.name as pet_name', 'schedules.created_at')
             ->join('schedules', 'schedules.customer_id', '=', 'users.id')
             ->join('services', 'services.id', '=', 'schedules.service_id')
             ->join('pets', 'pets.customer_id', '=', 'users.id')

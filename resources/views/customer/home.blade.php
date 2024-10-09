@@ -81,7 +81,7 @@
     <div class="row">
         <nav class="col-md-3">
             <ul class="nav flex-column">
-                <li class="nav-item">
+                <li class="nav-item" style="background-color: #DDDDDD;">
                     <a class="nav-link" href="#">Giới thiệu</a>
                 </li>
                 <li class="nav-item">

@@ -24,10 +24,19 @@ class MedicineController extends Controller
             'name' => 'required',
             'type' => 'required',
             'cost' => 'required',
-            'manufacture_date' => 'required|date',
-            'expiry_date' => 'required|date',
+            'manufacture_date' => 'required|date|after',
+            'expiry_date' => 'required|date|before',
+            'status' => 'required',
+            'quantity' => 'required'
+        ], [
+            'name.required' => 'Không được bỏ trống.',
+            'type.required' => 'Không được bỏ trống.',
+            'cost.required' => 'Không được bỏ trống.',
+            'manufacture_date.date' => 'Ngày phải là một ngày hợp lệ.',
+            'manufacture_date.after' => 'Ngày phải ở trong tương lai.',
+            'expiry_date.required' => 'Không được bỏ trống.',
+            'expiry_date.before' => 'Ngày phải ở trong qúa khứ.',
         ]);
-
         Medicine::create($request->all());
 
         return redirect()->route('medicines.index')

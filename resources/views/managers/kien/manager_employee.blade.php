@@ -141,7 +141,7 @@
         }
 
         .modal-content h5 {
-            text-align: center;
+            text-align: start;
             margin-bottom: 20px;
         }
 
@@ -210,7 +210,7 @@
 <body>
 <div class="sidebar">
     <div class="text-center mb-4">
-        <h6><i class="fas fa-user-md"></i>Quản lý</h6>
+        <h6><i class="fas fa-user-md"></i>QUẢN LÝ</h6>
     </div>
     <div class="divider"></div>
     <button class="btn"><i class="fas fa-book-medical"></i> Quản lý tài khoản</button>
@@ -351,7 +351,7 @@
 <!-- Confirmation Modal -->
 <div id="confirmationModal" class="modal">
     <div class="modal-content">
-        <h5>Xác nhận <span id="actionTypeText"></span> tài khoản</h5>
+        <h5 style="align-items: start">Xác nhận <span id="actionTypeText"></span> tài khoản</h5>
         <p>Bạn có muốn <span id="actionType"></span> tài khoản không?</p>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" onclick="closeModal()">Hủy</button>

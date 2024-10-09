@@ -178,6 +178,7 @@
                 <td>{{ $List->service_name }}</td>
                 <td>{{ $List->pet_name }}</td>
                 <td>{{ $List->created_at }}</td>
+                <td style="display: none">{{ $List->phone }}</td>
                 <td>
                     <button class="btn xem-thong-tin">Xem thông tin</button>
                 </td>
@@ -270,13 +271,14 @@
                 const tenKH = row.cells[1].innerText;
                 const loaiThuCung = row.cells[3].innerText;
                 const thoiGian = row.cells[4].innerText;
+                const phone = row.cells[5].innerText;
 
                 document.getElementById('maKH').value = maKH;
-                document.getElementById('soDienThoai').value = '';
+                document.getElementById('soDienThoai').value = phone;
                 document.getElementById('tenKH').value = tenKH;
                 document.getElementById('loaiThuCung').value = loaiThuCung;
                 document.getElementById('thoiGian').value = thoiGian;
-                document.getElementById('ghiChu').value = '';
+                document.getElementById('ghiChu').value = 'Không';
 
                 infoModal.style.display = 'block';
             });

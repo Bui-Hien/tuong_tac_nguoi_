@@ -8,7 +8,9 @@ use App\Models\Schedule;
 use App\Models\Service;
 use App\Models\User;
 use App\Models\UserRule;
+use App\Rules\NameValidation;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -25,32 +27,26 @@ class UserController extends Controller
 
     public function PostCreateEmployee(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email|unique:users',
-            'name' => 'required',
-            'rule' => 'in:1,2,3',
-            'sex' => 'in:0,1',
-            'password' => 'required|min:6',
-        ], [
-            'email.required' => 'Email là bắt buộc',
-            'email.email' => 'Email phải là một địa chỉ email hợp lệ',
-            'name.required' => 'Tên là bắt buộc',
-            'rule.in' => 'Quy tắc phải là một trong các giá trị: 1, 2, 3',
-            'sex.in' => 'Giới tính phải là một trong các giá trị: 0, 1',
-            'password.required' => 'Mật khẩu là bắt buộc',
-            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự',
-        ]);
-        $user = new User();
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->sex = $request->input('sex');
-        $user->created_by = Session::get("loginId");
-        $user->updated_by = Session::get("loginId");
-        $user->password = Hash::make($request->input('password'));
-        if ($user->save()) {
-            // Handle user roles
+        DB::beginTransaction();
+
+        try {
+            $this->validateName($request);
+            $this->validatePassword($request);
+            $this->validateEmail($request);
+            $this->validateSex($request);
+            $this->validateRule($request);
+            $this->validatePhone($request);
+
+            $user = new User();
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->sex = $request->input('sex');
+            $user->created_by = Session::get("loginId");
+            $user->updated_by = Session::get("loginId");
+            $user->password = Hash::make($request->input('password'));
+            $user->save();
             $roles = $request->only(['ruleEmployee', 'ruleDoctor', 'ruleManager']);
-            foreach ($roles as $role => $value) {
+            foreach ($roles as $value) {
                 if ($value) {
                     UserRule::create([
                         'user_id' => $user->id,
@@ -59,12 +55,97 @@ class UserController extends Controller
                     echo $value;
                 }
             }
-
+            DB::commit();
             return back()->with('success', 'Bạn đã đăng ký thành công.');
-        } else {
-            // Return failure response
+        } catch (Exception $e) {
+            DB::rollBack();
             return back()->with('fail', 'Đã xảy ra lỗi, vui lòng thử lại.');
         }
+    }
+
+    protected function validateName(Request $request)//1
+    {
+        $request->validate([
+            'name' => [
+                'required',//2
+                'max:50',//3
+                'regex:/^[a-zA-Z\s]+$/',//4
+            ],
+        ], [
+            'name.required' => 'Họ tên nhân viên không được trống.',//5
+            'name.max' => 'Họ tên nhân viên không được vượt quá 50 ký tự.',//6
+            'name.regex' => 'Họ tên nhân viên không được chứa số hoặc ký tự đặc biệt.',//7
+        ]);
+    }
+
+    protected function validatePassword(Request $request)//1
+    {
+        $request->validate([
+            'password' => [
+                'nullable',//2
+                'min:8',//3
+                'max:50',//4
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',//5
+            ],
+        ], [
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',//6
+            'password.max' => 'Mật khẩu không được vượt quá 50 ký tự.',//7
+            'password.regex' => 'Mật khẩu phải chứa ít nhất một chữ hoa, một chữ thường, một số và một ký tự đặc biệt.',//8
+        ]);
+    }
+
+    protected function validateEmail(Request $request)//1
+    {
+        $request->validate([
+            'email' => [
+                'required',//2
+                'regex:/^[a-zA-Z][a-zA-Z0-9._%+-]+@gmail\.com$/',//3
+            ],
+        ], [
+            'email.required' => 'Email không được rỗng.',//4
+            'email.regex' => 'Email phải có dạng <tên người dùng>@gmail.com và không được bắt đầu bằng số.',//5
+        ]);
+    }
+
+    protected function validateSex(Request $request)//1
+    {
+        $request->validate([
+            'sex' => [
+                'required',//2
+                'in:0,1',//3
+            ],
+        ], [
+            'sex.required' => 'Giới tính không được rỗng.',//4
+            'sex.in' => 'Giới tính chỉ được phép là Nam hoặc Nữ.',//5
+        ]);
+    }
+
+    protected function validateRule(Request $request)//1
+    {
+        $request->validate([
+            'rule' => [
+                'required',//2
+                'in:1,2,3',//3
+            ],
+        ], [
+            'rule.required' => 'Chức vụ không được rỗng.',//4
+            'rule.in' => 'Chức vụ chỉ có thể là Nhân viên, Bác sĩ, hoặc Quản lý.',//5
+        ]);
+    }
+
+    protected function validatePhone(Request $request)//1
+    {
+        $request->validate([
+            'phone' => [
+                'required',//2
+                'regex:/^[0-9]+$/',//3
+                'digits_between:10,11',//4
+            ],
+        ], [
+            'phone.required' => 'Số điện thoại không được rỗng.',//5
+            'phone.regex' => 'Số điện thoại chỉ được chứa các số nguyên dương.',//6
+            'phone.digits_between' => 'Số điện thoại trong khoảng 10 - 11 số.',//7
+        ]);
     }
 
     public
@@ -110,7 +191,9 @@ class UserController extends Controller
         }
         echo $user;
         return view('managers.edit-employee', compact('user'));
-    }    public
+    }
+
+    public
     function ManagerEmployee(Request $request)
     {
         $employeeId = $request->input('employee_id');
@@ -236,7 +319,7 @@ class UserController extends Controller
             'name' => 'required',
             'phone' => 'required|numeric',
             'date' => 'required|date|after:today',
-            'service' => 'required|numeric',
+            'service' => 'required|exists:services,id',
         ], [
             'name.required' => 'Không được bỏ trống.',
             'phone.required' => 'Không được bỏ trống.',
@@ -245,35 +328,54 @@ class UserController extends Controller
             'date.date' => 'Ngày phải là một ngày hợp lệ.',
             'date.after' => 'Ngày phải ở trong tương lai.',
             'service.required' => 'Không được bỏ trống.',
-            'service.numeric' => 'Dịch vụ phải là số.',
+            'service.exists' => 'Phải chọn một trong các lựa chọn trong danh sách.',
         ]);
 
         $user = new User();
         $user->name = $request->input('name');
         $user->phone = $request->input('phone');
-        if ($user->save()) {
-            UserRule::create([
-                'user_id' => $user->id,
-                'rule_id' => 4,
-                'created_by' => $user->id,
-                'updated_by' => $user->id,
-            ]);
+
+        $usersWithPhoneNumbers = User::whereHas('userRules.rule', function ($query) {
+            $query->where('id', 4); // Kiểm tra rule có id bằng 4
+        })
+            ->where("phone", $user->phone) // Kiểm tra số điện thoại
+            ->first(); // Lấy danh sách số điện thoại
+        if ($usersWithPhoneNumbers) {
             Schedule::create([
                 'date' => $request->input('date'),
                 'service_id' => $request->input('service'),
                 'doctor_id' => 4,
-                'customer_id' => $user->id,
+                'customer_id' => $usersWithPhoneNumbers->id,
                 'created_by' => $user->id,
                 'updated_by' => $user->id,
             ]);
             return back()->with('success', 'Bạn đã đăng ký thành công.');
         } else {
-            return back()->with('fail', 'Đã xảy ra lỗi, vui lòng thử lại.');
+            if ($user->save()) {
+                UserRule::create([
+                    'user_id' => $user->id,
+                    'rule_id' => 4,
+                    'created_by' => $user->id,
+                    'updated_by' => $user->id,
+                ]);
+                Schedule::create([
+                    'date' => $request->input('date'),
+                    'service_id' => $request->input('service'),
+                    'doctor_id' => 4,
+                    'customer_id' => $user->id,
+                    'created_by' => $user->id,
+                    'updated_by' => $user->id,
+                ]);
+                return back()->with('success', 'Bạn đã đăng ký thành công.');
+            } else {
+                return back()->with('fail', 'Đã xảy ra lỗi, vui lòng thử lại.');
 
+            }
         }
     }
 
-    public function schedulenew()
+    public
+    function schedulenew()
     {
         $status = 0;
         // Fetch users with schedules having status 0
@@ -288,7 +390,8 @@ class UserController extends Controller
         return view('employees.booknew', compact('users', 'status', 'statusCounts'));
     }
 
-    public function schedulecf()
+    public
+    function schedulecf()
     {
         $status = 1;
         // Fetcuh users with schedules having the specified status
@@ -304,7 +407,8 @@ class UserController extends Controller
         return view('employees.confirmedbook', compact('users', 'status', 'statusCounts', 'service'));
     }
 
-    public function schedulecancel(Request $request)
+    public
+    function schedulecancel(Request $request)
     {
         $status = 2;
 
@@ -321,7 +425,8 @@ class UserController extends Controller
         return view('employees.cancelbook', compact('users', 'status', 'statusCounts'));
     }
 
-    public function customer(Request $request)
+    public
+    function customer(Request $request)
     {
         // Retrieve query parameters from the request
         $customerId = $request->input('customer_id');
@@ -370,7 +475,8 @@ class UserController extends Controller
         return view('managers.customer_statis', compact('results', 'services'));
     }
 
-    public function exportCustomer(Request $request)
+    public
+    function exportCustomer(Request $request)
     {
         // Retrieve query parameters from the request
         $customerId = $request->input('customer_id');
@@ -417,7 +523,8 @@ class UserController extends Controller
         return view('managers.export_customer', compact('results'));
     }
 
-    public function exportWord(Request $request)
+    public
+    function exportWord(Request $request)
     {
         $results = json_decode($request->input('results'), true);
 
@@ -460,7 +567,8 @@ class UserController extends Controller
         return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
     }
 
-    public function pet(Request $request)
+    public
+    function pet(Request $request)
     {
         // Retrieve query parameters from the request
         $pet_id = $request->input('pet_id');
@@ -504,7 +612,8 @@ class UserController extends Controller
         return view('managers.pet_stats', compact('results'));
     }
 
-    public function exportPet(Request $request)
+    public
+    function exportPet(Request $request)
     {
         // Retrieve query parameters from the request
         $pet_id = $request->input('pet_id');
@@ -549,7 +658,8 @@ class UserController extends Controller
         return view('managers.export_pet', compact('results'));
     }
 
-    public function exportPetWord(Request $request)
+    public
+    function exportPetWord(Request $request)
     {
         // Lấy dữ liệu từ request và giải mã JSON thành mảng
         $results = json_decode($request->input('results'), true);
@@ -592,7 +702,8 @@ class UserController extends Controller
         return response()->download($tempFilePath, $fileName)->deleteFileAfterSend(true);
     }
 
-    public function medicine(Request $request)
+    public
+    function medicine(Request $request)
     {
         // Retrieve query parameters from the request
         $id = $request->input('id');
@@ -639,7 +750,8 @@ class UserController extends Controller
         return view('managers.medicine_stats', compact('results'));
     }
 
-    public function exportMedicine(Request $request)
+    public
+    function exportMedicine(Request $request)
     {
         // Retrieve query parameters from the request
         $id = $request->input('id');
@@ -686,7 +798,8 @@ class UserController extends Controller
         return view('managers.export_medicine', compact('results'));
     }
 
-    public function exportMedicineWord(Request $request, Medicine $results)
+    public
+    function exportMedicineWord(Request $request, Medicine $results)
     {
         $results = json_decode($request->input('results'), true);
 
@@ -723,7 +836,8 @@ class UserController extends Controller
         return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
     }
 
-    public function employee(Request $request)
+    public
+    function employee(Request $request)
     {
         $employeeId = $request->input('employee_id');
         $roleId = $request->input('role_id');
@@ -764,7 +878,8 @@ class UserController extends Controller
     }
 
 
-    public function exportEmployee(Request $request)
+    public
+    function exportEmployee(Request $request)
     {
         $employeeId = $request->input('employee_id');
         $roleId = $request->input('role_id');
@@ -804,7 +919,8 @@ class UserController extends Controller
         return view('managers.export_infor', compact('results'));
     }
 
-    public function exportEmployeeWord(Request $request)
+    public
+    function exportEmployeeWord(Request $request)
     {
         $results = json_decode($request->input('results'));
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th6 26, 2024 lúc 10:59 AM
+-- Thời gian đã tạo: Th10 02, 2024 lúc 08:12 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -38,15 +38,6 @@ CREATE TABLE `health_records` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Đang đổ dữ liệu cho bảng `health_records`
---
-
-INSERT INTO `health_records` (`id`, `date`, `doctor_id`, `pet_id`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, '2024-06-15', 4, 5, NULL, NULL, NULL, '2024-06-15 01:15:13', '2024-06-15 07:59:54'),
-(2, '2024-06-15', 4, 3, NULL, NULL, NULL, '2024-06-15 02:35:12', '2024-06-15 02:35:12'),
-(3, '2024-06-15', 4, 13, NULL, NULL, NULL, '2024-06-15 02:35:17', '2024-06-15 08:00:03');
 
 -- --------------------------------------------------------
 
@@ -160,25 +151,9 @@ CREATE TABLE `pets` (
 
 INSERT INTO `pets` (`id`, `name`, `sex`, `species`, `age`, `customer_id`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
 (1, 'Bella', 0, 'Dog', 3, 13, NULL, NULL, NULL, NULL, NULL),
-(2, 'Max', 0, 'Cat', 2, 14, NULL, NULL, NULL, NULL, NULL),
-(3, 'Lucy', 0, 'Bird', 1, 15, NULL, NULL, NULL, NULL, NULL),
-(4, 'Charlie', 0, 'Dog', 4, 16, NULL, NULL, NULL, NULL, NULL),
-(5, 'Daisy', 0, 'Rabbit', 2, 17, NULL, NULL, NULL, NULL, NULL),
-(6, 'Milo', 0, 'Cat', 3, 18, NULL, NULL, NULL, NULL, NULL),
-(7, 'Luna', 0, 'Dog', 1, 19, NULL, NULL, NULL, NULL, NULL),
-(8, 'Oscar', 0, 'Fish', 2, 20, NULL, NULL, NULL, NULL, NULL),
 (9, 'Chloe', 0, 'Bird', 4, 13, NULL, NULL, NULL, NULL, NULL),
-(10, 'Buddy', 0, 'Dog', 3, 14, NULL, NULL, NULL, NULL, NULL),
-(11, 'Molly', 0, 'Cat', 2, 15, NULL, NULL, NULL, NULL, NULL),
-(12, 'Rocky', 0, 'Rabbit', 1, 16, NULL, NULL, NULL, NULL, NULL),
-(13, 'Ruby', 0, 'Fish', 2, 17, NULL, NULL, NULL, NULL, NULL),
-(14, 'Jake', 0, 'Bird', 4, 18, NULL, NULL, NULL, NULL, NULL),
-(15, 'Nala', 0, 'Cat', 3, 19, NULL, NULL, NULL, NULL, NULL),
-(16, 'Leo', 0, 'Dog', 2, 20, NULL, NULL, NULL, NULL, NULL),
 (17, 'Zoe', 0, 'Rabbit', 1, 13, NULL, NULL, NULL, NULL, NULL),
-(18, 'Lily', 0, 'Fish', 4, 14, NULL, NULL, NULL, NULL, NULL),
-(19, 'Buster', 0, 'Cat', 3, 15, NULL, NULL, NULL, NULL, NULL),
-(20, 'Coco', 0, 'Bird', 2, 16, NULL, NULL, NULL, NULL, NULL);
+(21, 'Tech Vision Academy', 1, 'Dog', 11, 13, NULL, NULL, NULL, '2024-09-30 08:11:01', '2024-09-30 08:11:01');
 
 -- --------------------------------------------------------
 
@@ -196,15 +171,6 @@ CREATE TABLE `prescriptions` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Đang đổ dữ liệu cho bảng `prescriptions`
---
-
-INSERT INTO `prescriptions` (`id`, `employee_id`, `health_record_id`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 3, 1, NULL, NULL, NULL, NULL, '2024-06-16 01:29:05'),
-(2, 3, 2, NULL, NULL, NULL, NULL, '2024-06-16 01:29:01'),
-(3, 3, 3, NULL, NULL, NULL, NULL, '2024-06-15 08:39:31');
 
 -- --------------------------------------------------------
 
@@ -276,22 +242,8 @@ CREATE TABLE `schedules` (
 --
 
 INSERT INTO `schedules` (`id`, `date`, `status`, `service_id`, `doctor_id`, `customer_id`, `message`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, '2024-06-20', 2, 1, 4, 16, NULL, NULL, NULL, NULL, '2024-06-11 04:27:05', '2024-06-11 04:28:35'),
-(2, '2024-06-12', 2, 1, 4, 17, NULL, NULL, NULL, NULL, '2024-06-11 04:29:22', '2024-06-11 04:29:32'),
-(3, '2024-06-21', 1, 4, 4, 18, NULL, NULL, NULL, NULL, '2024-06-11 04:31:18', '2024-06-11 04:31:24'),
-(4, '2024-06-20', 2, 6, 4, 19, NULL, NULL, NULL, NULL, '2024-06-11 04:35:36', '2024-06-11 04:35:48'),
-(5, '2024-06-12', 2, 8, 4, 20, 'spam', NULL, NULL, NULL, '2024-06-11 04:38:01', '2024-06-11 04:38:15'),
 (6, '2024-06-20', 1, 1, 4, 21, NULL, NULL, NULL, NULL, '2024-06-18 21:19:04', '2024-06-18 22:01:32'),
-(7, '2024-06-20', 1, 4, 4, 22, NULL, NULL, NULL, NULL, '2024-06-19 00:08:17', '2024-06-19 00:09:47'),
-(8, '2024-06-20', 1, 4, 4, 23, NULL, NULL, NULL, NULL, '2024-06-19 00:11:08', '2024-06-19 00:21:18'),
-(9, '2024-06-20', 1, 8, 4, 24, NULL, NULL, NULL, NULL, '2024-06-19 00:23:12', '2024-06-19 00:35:17'),
-(10, '2024-06-20', 1, 9, 4, 25, NULL, NULL, NULL, NULL, '2024-06-19 00:48:01', '2024-06-20 00:45:37'),
-(11, '2024-07-05', 1, 8, 4, 26, NULL, NULL, NULL, NULL, '2024-06-19 00:48:10', '2024-06-24 08:08:31'),
-(12, '2024-06-21', 1, 8, 4, 27, NULL, NULL, NULL, NULL, '2024-06-20 00:14:40', '2024-06-24 08:16:19'),
-(13, '2024-06-25', 1, 4, 4, 28, NULL, NULL, NULL, NULL, '2024-06-24 07:36:50', '2024-06-24 08:16:21'),
-(14, '2024-07-03', 1, 6, 4, 29, NULL, NULL, NULL, NULL, '2024-06-24 07:39:32', '2024-06-24 08:17:44'),
-(15, '2024-06-25', 1, 6, 4, 30, NULL, NULL, NULL, NULL, '2024-06-24 07:41:28', '2024-06-24 08:18:40'),
-(16, '2024-06-25', 0, 4, 4, 31, NULL, NULL, NULL, NULL, '2024-06-24 08:08:07', '2024-06-24 08:08:07');
+(17, '2024-10-02', 0, 1, 4, 13, NULL, NULL, NULL, NULL, '2024-09-30 23:06:35', '2024-09-30 23:06:35');
 
 -- --------------------------------------------------------
 
@@ -359,24 +311,7 @@ INSERT INTO `users` (`id`, `name`, `email`, `sex`, `birthday`, `hometown`, `addr
 (6, 'hien', '21511705142@e.tlu.edu.vn', 0, '2003-07-01', NULL, NULL, '0763433779', NULL, '$2y$10$kTc8Ii/p7tVv3ej8oVeGtezFHO.1hR1nPyMHu0HFOPzv4x8HnTObq', 2, 2, NULL, '2024-06-08 22:19:01', '2024-06-08 22:26:18'),
 (7, 'hien', 'qusssanly@gmail.com', 1, '2003-07-01', NULL, NULL, '0763433779', NULL, '$2y$10$NMsM7Cl60mTdNt5m.oSG0uJ1byg1oit7Y0mkVFzbJe/..czFdSUhO', 2, 2, NULL, '2024-06-08 22:24:55', '2024-06-08 22:26:17'),
 (13, 'hien', NULL, NULL, NULL, NULL, NULL, '0763433779', NULL, NULL, NULL, NULL, NULL, '2024-06-11 03:12:10', '2024-06-11 03:12:10'),
-(14, 'hien', NULL, NULL, NULL, NULL, NULL, '0763433779', NULL, NULL, NULL, NULL, NULL, '2024-06-11 04:15:44', '2024-06-11 04:15:44'),
-(15, 'hien', NULL, NULL, NULL, NULL, NULL, '0763433779', NULL, NULL, NULL, NULL, NULL, '2024-06-11 04:18:43', '2024-06-11 04:18:43'),
-(16, 'hien', NULL, NULL, NULL, NULL, NULL, '0763433779', NULL, NULL, NULL, NULL, NULL, '2024-06-11 04:27:05', '2024-06-11 04:27:05'),
-(17, 'hien', NULL, NULL, NULL, NULL, NULL, '0763433779', NULL, NULL, NULL, NULL, NULL, '2024-06-11 04:29:22', '2024-06-11 04:29:22'),
-(18, 'hien', NULL, NULL, NULL, NULL, NULL, '0763433779', NULL, NULL, NULL, NULL, NULL, '2024-06-11 04:31:18', '2024-06-11 04:31:18'),
-(19, 'hien', NULL, NULL, NULL, NULL, NULL, '0763433779', NULL, NULL, NULL, NULL, NULL, '2024-06-11 04:35:36', '2024-06-11 04:35:36'),
-(20, 'hien', NULL, NULL, NULL, NULL, NULL, '0763433779', NULL, NULL, NULL, NULL, NULL, '2024-06-11 04:38:01', '2024-06-11 04:38:01'),
-(21, 'Hiền', NULL, NULL, NULL, NULL, NULL, '0763433770', NULL, NULL, NULL, NULL, NULL, '2024-06-18 21:19:03', '2024-06-18 21:19:03'),
-(22, 'hien', NULL, NULL, NULL, NULL, NULL, '0763433770', NULL, NULL, NULL, NULL, NULL, '2024-06-19 00:08:16', '2024-06-19 00:08:16'),
-(23, 'bxhien', NULL, NULL, NULL, NULL, NULL, '0763433770', NULL, NULL, NULL, NULL, NULL, '2024-06-19 00:11:08', '2024-06-19 00:11:08'),
-(24, 'bxhien', NULL, NULL, NULL, NULL, NULL, '0763433770', NULL, NULL, NULL, NULL, NULL, '2024-06-19 00:23:12', '2024-06-19 00:23:12'),
-(25, 'Hiền', NULL, NULL, NULL, NULL, NULL, '0763433770', NULL, NULL, NULL, NULL, NULL, '2024-06-19 00:48:01', '2024-06-19 00:48:01'),
-(26, 'bxhien', NULL, NULL, NULL, NULL, NULL, '0763433770', NULL, NULL, NULL, NULL, NULL, '2024-06-19 00:48:10', '2024-06-19 00:48:10'),
-(27, 'Hiền', NULL, NULL, NULL, NULL, NULL, '0763433770', NULL, NULL, NULL, NULL, NULL, '2024-06-20 00:14:40', '2024-06-20 00:14:40'),
-(28, 'hien', NULL, NULL, NULL, NULL, NULL, '0763433770', NULL, NULL, NULL, NULL, NULL, '2024-06-24 07:36:50', '2024-06-24 07:36:50'),
-(29, 'bxhien', NULL, NULL, NULL, NULL, NULL, '0763433770', NULL, NULL, NULL, NULL, NULL, '2024-06-24 07:39:32', '2024-06-24 07:39:32'),
-(30, 'bxhien', NULL, NULL, NULL, NULL, NULL, '0763433770', NULL, NULL, NULL, NULL, NULL, '2024-06-24 07:41:28', '2024-06-24 07:41:28'),
-(31, 'Bui xuan  Hien HienBui xuan  Hien Hien', NULL, NULL, NULL, NULL, NULL, '0763433770', NULL, NULL, NULL, NULL, NULL, '2024-06-24 08:08:07', '2024-06-24 08:08:07');
+(21, 'Hiền', NULL, NULL, NULL, NULL, NULL, '0763433770', NULL, NULL, NULL, NULL, NULL, '2024-06-18 21:19:03', '2024-06-18 21:19:03');
 
 -- --------------------------------------------------------
 
@@ -412,24 +347,7 @@ INSERT INTO `user_rules` (`id`, `user_id`, `rule_id`, `created_by`, `updated_by`
 (12, 7, 3, NULL, NULL, NULL, '2024-06-08 22:24:55', '2024-06-08 22:24:55'),
 (15, 2, 3, NULL, NULL, NULL, '2024-06-08 22:54:18', '2024-06-08 22:54:18'),
 (22, 13, 4, NULL, NULL, NULL, '2024-06-11 03:12:10', '2024-06-11 03:12:10'),
-(23, 14, 4, NULL, NULL, NULL, '2024-06-11 04:15:44', '2024-06-11 04:15:44'),
-(24, 15, 4, NULL, NULL, NULL, '2024-06-11 04:18:43', '2024-06-11 04:18:43'),
-(25, 16, 4, NULL, NULL, NULL, '2024-06-11 04:27:05', '2024-06-11 04:27:05'),
-(26, 17, 4, NULL, NULL, NULL, '2024-06-11 04:29:22', '2024-06-11 04:29:22'),
-(27, 18, 4, NULL, NULL, NULL, '2024-06-11 04:31:18', '2024-06-11 04:31:18'),
-(28, 19, 4, NULL, NULL, NULL, '2024-06-11 04:35:36', '2024-06-11 04:35:36'),
-(29, 20, 4, NULL, NULL, NULL, '2024-06-11 04:38:01', '2024-06-11 04:38:01'),
-(30, 21, 4, NULL, NULL, NULL, '2024-06-18 21:19:04', '2024-06-18 21:19:04'),
-(31, 22, 4, NULL, NULL, NULL, '2024-06-19 00:08:17', '2024-06-19 00:08:17'),
-(32, 23, 4, NULL, NULL, NULL, '2024-06-19 00:11:08', '2024-06-19 00:11:08'),
-(33, 24, 4, NULL, NULL, NULL, '2024-06-19 00:23:12', '2024-06-19 00:23:12'),
-(34, 25, 4, NULL, NULL, NULL, '2024-06-19 00:48:01', '2024-06-19 00:48:01'),
-(35, 26, 4, NULL, NULL, NULL, '2024-06-19 00:48:10', '2024-06-19 00:48:10'),
-(36, 27, 4, NULL, NULL, NULL, '2024-06-20 00:14:40', '2024-06-20 00:14:40'),
-(37, 28, 4, NULL, NULL, NULL, '2024-06-24 07:36:50', '2024-06-24 07:36:50'),
-(38, 29, 4, NULL, NULL, NULL, '2024-06-24 07:39:32', '2024-06-24 07:39:32'),
-(39, 30, 4, NULL, NULL, NULL, '2024-06-24 07:41:28', '2024-06-24 07:41:28'),
-(40, 31, 4, NULL, NULL, NULL, '2024-06-24 08:08:07', '2024-06-24 08:08:07');
+(30, 21, 4, NULL, NULL, NULL, '2024-06-18 21:19:04', '2024-06-18 21:19:04');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -554,7 +472,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT cho bảng `pets`
 --
 ALTER TABLE `pets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT cho bảng `prescriptions`
@@ -578,7 +496,7 @@ ALTER TABLE `rules`
 -- AUTO_INCREMENT cho bảng `schedules`
 --
 ALTER TABLE `schedules`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT cho bảng `services`

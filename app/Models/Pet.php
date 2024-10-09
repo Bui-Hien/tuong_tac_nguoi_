@@ -16,7 +16,7 @@ class Pet extends BaseModel
         'sex',
         'species',
         'age',
-        'user_id',
+        'customer_id',
     ];
 
     protected $hidden = [

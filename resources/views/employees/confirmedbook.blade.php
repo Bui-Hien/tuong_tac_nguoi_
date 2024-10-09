@@ -269,7 +269,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-secondary btn-primary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>

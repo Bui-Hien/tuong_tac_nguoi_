@@ -113,7 +113,7 @@
         <div class="col-md-2 sidebar mt-0">
             <div class="d-flex flex-column p-3 pt-0 ">
                 <div class="mt-0">
-                    <span> <i class="bi bi-person-circle"></i>BAC SI</span>
+                    <span> <i class="bi bi-person-circle"></i>QUẢN LÝ</span>
                 </div>
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2">
@@ -130,7 +130,7 @@
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a class="nav-link active" href="{{ route('managers.medicine') }}">
+                        <a class="nav-link " href="{{ route('managers.medicine') }}">
                             <i class="p-1">
                                 <svg width="26" height="26" viewBox="0 0 26 26" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
@@ -142,8 +142,8 @@
                             Thống kê thuốc thú Y
                         </a>
                     </li>
-                    <li class="nav-item mb-2">
-                        <a class="nav-link" href="{{ route('managers.customer') }}">
+                    <li class="nav-item mb-2 ">
+                        <a class="nav-link active" href="{{ route('managers.customer') }}">
                             <i class="p-1">
                                 <svg width="26" height="26" viewBox="0 0 26 26" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
