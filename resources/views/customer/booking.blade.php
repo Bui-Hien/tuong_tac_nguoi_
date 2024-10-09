@@ -106,6 +106,9 @@
                                 <div class="modal-header">
                                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Lịch hẹn đã được đặt thành
                                         công</h1>
+                                    [Danh thiếp]
+                                    Cối
+                                    0989883833
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                 </div>

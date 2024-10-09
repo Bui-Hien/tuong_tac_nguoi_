@@ -312,68 +312,6 @@ class UserController extends Controller
         return view('managers.search', compact('data', 'rules'));
     }
 
-
-    public function StoreBuild(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'phone' => 'required|numeric',
-            'date' => 'required|date|after:today',
-            'service' => 'required|exists:services,id',
-        ], [
-            'name.required' => 'Không được bỏ trống.',
-            'phone.required' => 'Không được bỏ trống.',
-            'phone.numeric' => 'Số điện thoại phải là số.',
-            'date.required' => 'Không được bỏ trống.',
-            'date.date' => 'Ngày phải là một ngày hợp lệ.',
-            'date.after' => 'Ngày phải ở trong tương lai.',
-            'service.required' => 'Không được bỏ trống.',
-            'service.exists' => 'Phải chọn một trong các lựa chọn trong danh sách.',
-        ]);
-
-        $user = new User();
-        $user->name = $request->input('name');
-        $user->phone = $request->input('phone');
-
-        $usersWithPhoneNumbers = User::whereHas('userRules.rule', function ($query) {
-            $query->where('id', 4); // Kiểm tra rule có id bằng 4
-        })
-            ->where("phone", $user->phone) // Kiểm tra số điện thoại
-            ->first(); // Lấy danh sách số điện thoại
-        if ($usersWithPhoneNumbers) {
-            Schedule::create([
-                'date' => $request->input('date'),
-                'service_id' => $request->input('service'),
-                'doctor_id' => 4,
-                'customer_id' => $usersWithPhoneNumbers->id,
-                'created_by' => $user->id,
-                'updated_by' => $user->id,
-            ]);
-            return back()->with('success', 'Bạn đã đăng ký thành công.');
-        } else {
-            if ($user->save()) {
-                UserRule::create([
-                    'user_id' => $user->id,
-                    'rule_id' => 4,
-                    'created_by' => $user->id,
-                    'updated_by' => $user->id,
-                ]);
-                Schedule::create([
-                    'date' => $request->input('date'),
-                    'service_id' => $request->input('service'),
-                    'doctor_id' => 4,
-                    'customer_id' => $user->id,
-                    'created_by' => $user->id,
-                    'updated_by' => $user->id,
-                ]);
-                return back()->with('success', 'Bạn đã đăng ký thành công.');
-            } else {
-                return back()->with('fail', 'Đã xảy ra lỗi, vui lòng thử lại.');
-
-            }
-        }
-    }
-
     public
     function schedulenew()
     {
@@ -963,5 +901,123 @@ class UserController extends Controller
         $objWriter->save($tempFile);
 
         return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
+    }
+
+
+
+    public function StoreBuild(Request $request)
+    {
+        // Validate each field using separate methods
+        $this->validateNameBuild($request);
+        $this->validatePhoneBuild($request);
+        $this->validateDateBuild($request);
+        $this->validateServiceBuild($request);
+
+        // Attempt to create a new user
+        $user = $this->createUser($request);
+
+        if ($user) {
+            // If user creation is successful, proceed with additional steps
+            $this->createUserRule($user);
+            $this->createSchedule($user, $request);
+            return back()->with('success', 'Bạn đã đăng ký thành công.');
+        } else {
+            // If user creation fails, return an error message
+            return back()->with('fail', 'Đã xảy ra lỗi, vui lòng thử lại.');
+        }
+    }
+
+    // Validation for the 'name' field
+    // Validation for the 'name' field
+    protected function validateNameBuild($request)
+    {
+        $request->validate([
+            'name' => 'required|max:70|regex:/^[^~!@#\$%\^&\*\(\)_\+\<\>\[\]\{\}]+$/',
+        ], [
+            'name.required' => 'Họ tên không được để trống.',
+            'name.max' => 'Họ tên nhập vượt quá 70 ký tự, vui lòng nhập lại.',
+            'name.regex' => 'Họ tên không được chứa ký tự đặc biệt, vui lòng nhập lại.',
+        ]);
+
+        return true;
+    }
+
+// Validation for the 'phone' field
+    protected function validatePhoneBuild($request)
+    {
+        $request->validate([
+            'phone' => 'required|digits_between:10,11|numeric',
+        ], [
+            'phone.required' => 'Số điện thoại không được để trống.',
+            'phone.numeric' => 'Số điện thoại phải là số nguyên dương và đúng định dạng.',
+            'phone.digits_between' => 'Số điện thoại phải trong khoảng từ 10 đến 11 chữ số.',
+        ]);
+
+        return true;
+    }
+
+// Validation for the 'date' field
+    protected function validateDateBuild($request)
+    {
+        $request->validate([
+            'date' => 'required|date|after:today',
+        ], [
+            'date.required' => 'Ngày đặt lịch không được để trống.',
+            'date.date' => 'Ngày đặt lịch chưa đúng định dạng, vui lòng nhập lại.',
+            'date.after' => 'Ngày đặt lịch phải sau ngày hiện tại.',
+        ]);
+
+        return true;
+    }
+
+// Validation for the 'service' field
+    protected function validateServiceBuild($request)
+    {
+        $request->validate([
+            'service' => 'required',
+        ], [
+            'service.required' => 'Dịch vụ không được để trống.',
+        ]);
+
+        return true;
+    }
+
+
+    // Method to create the user
+    protected function createUser($request)
+    {
+        $user = new User();
+        $user->name = $request->input('name');
+        $user->phone = $request->input('phone');
+
+        if ($user->save()) {
+            return $user;
+        } else {
+            return null;
+        }
+    }
+
+    // Method to assign the user rule
+    protected function createUserRule($user)
+    {
+        UserRule::create([
+            'user_id' => $user->id,
+            'rule_id' => 4,
+            'created_by' => $user->id,
+            'updated_by' => $user->id,
+        ]);
+    }
+
+    // Method to create a schedule
+    protected function createSchedule($user, $request)
+    {
+        Schedule::create([
+            'date' => $request->input('date'),
+            'service_id' => $request->input('service'),
+            'doctor_id' => 4,
+            'customer_id' => $user->id,
+            'created_by' => $user->id,
+            'updated_by' => $user->id,
+        ]);
     }
 }
