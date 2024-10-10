@@ -75,7 +75,8 @@ Route::middleware(['authEmployee'])->group(function () {
     Route::put('employees/customers/{id}/cf-build', [\App\Http\Controllers\ScheduleController::class, 'CfCfBuild'])->name('cf-update-build');
     Route::put('employees/customers/{id}/cancel-build', [\App\Http\Controllers\ScheduleController::class, 'CancelBuild'])->name('cancel-update-build');
     Route::resource('employees/medicines', MedicineController::class);
-
+    Route::post('/medicines/store', [MedicineController::class, 'store'])->middleware('convert.date');
+/// them moi
     Route::get('employees/export_imediccine', [UserController::class, 'export_imediccine'])->name('employees.export_imediccine');
     Route::resource('employees/pets', PetController::class);
 

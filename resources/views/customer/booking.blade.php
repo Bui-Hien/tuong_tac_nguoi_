@@ -65,7 +65,7 @@
                     <div class="mb-3">
                         <label for="phone" class="form-label">Số Điện Thoại</label>
                         <input type="text" class="form-control" id="phone" name="phone" value="{{old("phone")}}"
-                               placeholder="0989883833">
+                               placeholder="09xxxxxxx">
                         @if ($errors->has('phone'))
                             <span class="text-danger">{{ $errors->first('phone') }}</span>
                         @endif
@@ -73,14 +73,15 @@
                     <div class="mb-3">
                         <label for="date" class="form-label">Ngày Đặt Dịch Vụ</label>
                         <input type="date" class="form-control" name="date" value="{{old("date")}}" id="date">
-                        @if ($errors->has('phone'))
-                            <span class="text-danger">{{ $errors->first('phone') }}</span>
+                        @if ($errors->has('date'))
+                            <span class="text-danger">{{ $errors->first('date') }}</span>
                         @endif
 
                     </div>
                     <div class="mb-3">
                         <label for="location" class="form-label">Cơ Sở</label>
                         <input type="text" class="form-control" id="location" placeholder="Hà Nội" readonly>
+                        
                     </div>
                     <div class="mb-3">
                         <label for="location" class="form-label">Chọn loại dịc vụ</label>
@@ -106,11 +107,6 @@
                         <div class="modal-dialog modal-dialog-centered"> <!-- Added modal-dialog-centered class -->
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Lịch hẹn đã được đặt thành
-                                        công</h1>
-                                    [Danh thiếp]
-                                    Cối
-                                    0989883833
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                 </div>
@@ -141,5 +137,4 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 </body>
-
 </html>
