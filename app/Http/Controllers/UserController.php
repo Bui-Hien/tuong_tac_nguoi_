@@ -922,65 +922,55 @@ class UserController extends Controller
             return back()->with('success', 'Bạn đã đăng ký thành công.');
         } else {
             // If user creation fails, return an error message
-            return back()->with('fail', 'Đã xảy ra lỗi, vui lòng thử lại.');
+            return back()->with('fail', 'Có lỗi xảy ra trong quá trình đăng ký. Vui lòng thử lại sau.');
         }
     }
 
-    // Validation for the 'name' field
     // Validation for the 'name' field
     protected function validateNameBuild($request)
     {
         $request->validate([
             'name' => 'required|max:70|regex:/^[a-zA-Z\s]+$/',
         ], [
-            'name.required' => 'Họ tên không được để trống.',
-            'name.max' => 'Họ tên nhập vượt quá 70 ký tự, vui lòng nhập lại.',
-            'name.regex' => 'Họ tên không được chứa ký tự đặc biệt, vui lòng nhập lại.',
+            'name.required' => 'Vui lòng nhập họ tên.',
+            'name.max' => 'Họ tên không được vượt quá 70 ký tự.',
+            'name.regex' => 'Họ tên chỉ được chứa các ký tự chữ cái và khoảng trắng.',
         ]);
-
-        return true;
     }
 
-// Validation for the 'phone' field
+    // Validation for the 'phone' field
     protected function validatePhoneBuild($request)
     {
         $request->validate([
             'phone' => 'required|digits_between:10,11|numeric',
         ], [
-            'phone.required' => 'Số điện thoại không được để trống.',
-            'phone.numeric' => 'Số điện thoại phải là số nguyên dương và đúng định dạng.',
-            'phone.digits_between' => 'Số điện thoại phải trong khoảng từ 10 đến 11 chữ số.',
+            'phone.required' => 'Vui lòng nhập số điện thoại.',
+            'phone.numeric' => 'Số điện thoại phải là các ký tự số.',
+            'phone.digits_between' => 'Số điện thoại phải có từ 10 đến 11 chữ số.',
         ]);
-
-        return true;
     }
 
-// Validation for the 'date' field
+    // Validation for the 'date' field
     protected function validateDateBuild($request)
     {
         $request->validate([
             'date' => 'required|date|after:today',
         ], [
-            'date.required' => 'Ngày đặt lịch không được để trống.',
-            'date.date' => 'Ngày đặt lịch chưa đúng định dạng, vui lòng nhập lại.',
-            'date.after' => 'Ngày đặt lịch phải sau ngày hiện tại.',
+            'date.required' => 'Vui lòng chọn ngày đặt lịch.',
+            'date.date' => 'Ngày đặt lịch không đúng định dạng. Vui lòng kiểm tra lại.',
+            'date.after' => 'Ngày đặt lịch phải là ngày trong tương lai.',
         ]);
-
-        return true;
     }
 
-// Validation for the 'service' field
+    // Validation for the 'service' field
     protected function validateServiceBuild($request)
     {
         $request->validate([
             'service' => 'required',
         ], [
-            'service.required' => 'Dịch vụ không được để trống.',
+            'service.required' => 'Vui lòng chọn dịch vụ.',
         ]);
-
-        return true;
     }
-
 
     // Method to create the user
     protected function createUser($request)

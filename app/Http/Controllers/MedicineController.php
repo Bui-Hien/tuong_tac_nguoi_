@@ -61,7 +61,7 @@ class MedicineController extends Controller
         // Cập nhật bản ghi thuốc
         $medicine = Medicine::findOrFail($id);
         $data = $request->all();
-        $data['quantity'] = $data['quantity'] ?? 0; // hoặc bất kỳ giá trị nào bạn muốn cập nhật
+        $data['quantity'] = $data['quantity'] ?? 0;
 
         $medicine->update($data);
 
@@ -83,7 +83,6 @@ class MedicineController extends Controller
         $request->validate([
             'name' => [
                 'required',
-                'string',
                 'max:255',
                 function ($attribute, $value, $fail) {
                     $this->checkSpecialCharacters($value, $fail, 'Tên thuốc không được chứa ký tự đặc biệt, vui lòng nhập lại.');
@@ -93,7 +92,23 @@ class MedicineController extends Controller
             'name.required' => 'Tên thuốc không được để trống.',
             'name.max' => 'Tên thuốc không được vượt quá 255 ký tự.',
         ]);
+      
     }
+//     private function validateName(Request $request) // 1
+// {
+//     $request->validate([ // 2
+//         'name' => [
+//             'required',  // 3: Kiểm tra 'name' bắt buộc
+//             'max:255',   // 4: Kiểm tra độ dài tối đa là 255 ký tự
+//             'regex:/^[a-zA-Z\s]+$/', // 5: Kiểm tra chỉ có chữ cái và khoảng trắng
+//         ],
+//     ], [
+//         'name.required' => 'Tên thuốc không được để trống.', // 6
+//         'name.max' => 'Tên thuốc không được vượt quá 255 ký tự.', // 7
+//         'name.regex' => 'Trường này không được chứa ký tự đặc biệt, vui lòng nhập lại.', // 8
+//     ]); 
+// } // 9
+
 
     private function validatePrice(Request $request)
     {
@@ -105,15 +120,17 @@ class MedicineController extends Controller
             'cost.min' => 'Giá phải lớn hơn hoặc bằng 1000.',
             'cost.max' => 'Giá không được vượt quá giới hạn.',
         ]);
+        return true;
     }
 
     private function validateType(Request $request)
     {
         $request->validate([
-            'type' => 'required|string',
+            'type' => 'required',
         ], [
             'type.required' => 'Loại thuốc không được để trống.',
         ]);
+        return true;
     }
 
     private function validateStatus(Request $request)
@@ -122,9 +139,8 @@ class MedicineController extends Controller
             'status' => 'required|integer|in:0,1', // Ensure the status is either 0 or 1
         ], [
             'status.required' => 'Trạng thái không được để trống.',
-            'status.integer' => 'Trạng thái phải là số nguyên.',
-            'status.in' => 'Trạng thái không hợp lệ, vui lòng nhập 0 (hết) hoặc 1 (còn).',
         ]);
+        return true;
     }
 
     private function validateManufactureDate(Request $request)
@@ -135,6 +151,7 @@ class MedicineController extends Controller
             'manufacture_date.required' => 'Ngày sản xuất không được để trống.',
             'manufacture_date.date' => 'Ngày sản xuất không đúng định dạng.',
         ]);
+        return true;
     }
 
     private function validateExpiryDate(Request $request)
@@ -146,6 +163,7 @@ class MedicineController extends Controller
             'expiry_date.date' => 'Hạn sử dụng không đúng định dạng.',
             'expiry_date.after' => 'Hạn sử dụng thuốc phải nhập sau ngày sản xuất.',
         ]);
+        return true;
     }
 
     // Phương thức kiểm tra ký tự đặc biệt
